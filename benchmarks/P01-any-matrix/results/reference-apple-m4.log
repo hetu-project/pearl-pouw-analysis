@@ -1,0 +1,63 @@
+# cmd: ./target/release/examples/p01_any_matrix zk  (rustc 1.88.0, pearl @156ef9a8, Apple M4 16 GB, Tue Oct 27 15:42:38 CST 2026)
+==== case: random[-64,64] (default) | m=256 n=512 k=2048 r=128 h=4 w=8 nbits=0x1E01FFFF seed=Salted(V3)
+[random[-64,64] (default)] mine() ok in 38.92875ms
+[random[-64,64] (default)] opened A rows=[0, 8, 64, 72] B cols=[400, 401, 408, 409, 432, 433, 440, 441]
+[random[-64,64] (default)] first 16 committed A bytes of opened leaf: [55, 46, -6, -47, 12, 1, 22, 9, 12, -30, 54, 48, 34, -42, 10, -39]
+[random[-64,64] (default)] first 16 committed B bytes of opened leaf: [-1, -31, 12, -63, 30, 35, -40, 11, 32, 3, -24, -24, -26, -32, 11, 60]
+[random[-64,64] (default)] A root=a3f24efad498cda7.. B root=a624d43894c5bdd8..
+[random[-64,64] (default)] verify_plain_proof: ACCEPTED
+[random[-64,64] (default)] check_cert_version_eligible(3): ok (ZkV3)
+[random[-64,64] (default)] zk_prove (sanity_check=true) ok in 5.680822375s, proof_data=59560 B
+[random[-64,64] (default)] verify_block (ZK, consensus path): ACCEPTED
+[random[-64,64] (default)] check_rank_penalty: ok
+==== case: all-zero (0,0) | m=256 n=512 k=2048 r=128 h=4 w=8 nbits=0x1E01FFFF seed=Salted(V3)
+[all-zero (0,0)] mine() ok in 20.797833ms
+[all-zero (0,0)] opened A rows=[0, 8, 64, 72] B cols=[192, 193, 200, 201, 224, 225, 232, 233]
+[all-zero (0,0)] first 16 committed A bytes of opened leaf: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[all-zero (0,0)] first 16 committed B bytes of opened leaf: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+[all-zero (0,0)] A root=2bd8935591029d54.. B root=d4765797e40f9cee..
+[all-zero (0,0)] verify_plain_proof: ACCEPTED
+[all-zero (0,0)] check_cert_version_eligible(3): ok (ZkV3)
+[all-zero (0,0)] zk_prove (sanity_check=true) ok in 4.909195542s, proof_data=59560 B
+[all-zero (0,0)] verify_block (ZK, consensus path): ACCEPTED
+[all-zero (0,0)] check_rank_penalty: ok
+==== case: constant 7 (7,7) | m=256 n=512 k=2048 r=128 h=4 w=8 nbits=0x1E01FFFF seed=Salted(V3)
+[constant 7 (7,7)] mine() ok in 26.031ms
+[constant 7 (7,7)] opened A rows=[1, 9, 65, 73] B cols=[464, 465, 472, 473, 496, 497, 504, 505]
+[constant 7 (7,7)] first 16 committed A bytes of opened leaf: [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]
+[constant 7 (7,7)] first 16 committed B bytes of opened leaf: [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]
+[constant 7 (7,7)] A root=5e08ce9fa74e9d50.. B root=f74f996e26514453..
+[constant 7 (7,7)] verify_plain_proof: ACCEPTED
+[constant 7 (7,7)] check_cert_version_eligible(3): ok (ZkV3)
+[constant 7 (7,7)] zk_prove (sanity_check=true) ok in 4.429016042s, proof_data=59560 B
+[constant 7 (7,7)] verify_block (ZK, consensus path): ACCEPTED
+[constant 7 (7,7)] check_rank_penalty: ok
+==== case: constant -64 (-64,-64) | m=256 n=512 k=2048 r=128 h=4 w=8 nbits=0x1E01FFFF seed=Salted(V3)
+[constant -64 (-64,-64)] mine() ok in 29.108667ms
+[constant -64 (-64,-64)] opened A rows=[2, 10, 66, 74] B cols=[340, 341, 348, 349, 372, 373, 380, 381]
+[constant -64 (-64,-64)] first 16 committed A bytes of opened leaf: [-64, -64, -64, -64, -64, -64, -64, -64, -64, -64, -64, -64, -64, -64, -64, -64]
+[constant -64 (-64,-64)] first 16 committed B bytes of opened leaf: [-64, -64, -64, -64, -64, -64, -64, -64, -64, -64, -64, -64, -64, -64, -64, -64]
+[constant -64 (-64,-64)] A root=903089e2d72d43df.. B root=6f98e41839b12f20..
+[constant -64 (-64,-64)] verify_plain_proof: ACCEPTED
+[constant -64 (-64,-64)] check_cert_version_eligible(3): ok (ZkV3)
+[constant -64 (-64,-64)] zk_prove (sanity_check=true) ok in 4.379905208s, proof_data=59560 B
+[constant -64 (-64,-64)] verify_block (ZK, consensus path): ACCEPTED
+[constant -64 (-64,-64)] check_rank_penalty: ok
+       21.33 real       130.96 user        14.11 sys
+          4189863936  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+             2228018  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   2  voluntary context switches
+              696328  involuntary context switches
+       1733055139463  instructions retired
+        476872319742  cycles elapsed
+          5460775184  peak memory footprint

@@ -7,3 +7,6 @@ target/
 __pycache__/
 *.pyc
 .DS_Store
+
+# benchmark runs (reference results are committed separately)
+benchmarks/*/results/run-*.log
