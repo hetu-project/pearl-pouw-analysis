@@ -1,0 +1,41 @@
+# pearl @156ef9a8, Wed Oct 28 16:25:17 CST 2026
+
+A. Useful miner: extra work on every mined GEMM call (pearl_gemm_noisy)
+  - entry point of a mined GEMM
+      miner/vllm-miner/src/vllm_miner/gemm_operators.py:68  def pearl_gemm_noisy(
+  - copies and BLAKE3-hashes the activations A
+      miner/vllm-miner/src/vllm_miner/gemm_operators.py:126  A.to(torch.uint8),
+  - copies and BLAKE3-hashes the whole weight shard B, on every call
+      miner/vllm-miner/src/vllm_miner/gemm_operators.py:134  B.to(torch.uint8),
+  - regenerates noise factors from the new commitments, on every call
+      miner/vllm-miner/src/vllm_miner/gemm_operators.py:162  ) = generate_noise_factors(
+  - noises B again, on every call
+      miner/vllm-miner/src/vllm_miner/gemm_operators.py:214  run_noising_B=True,  # run_noising_B
+  - denoises the output (the useful result), on every call
+      miner/vllm-miner/src/vllm_miner/gemm_operators.py:216  skip_denoising=False,  # skip_denoising
+
+B. Pure miner: what it can skip
+  - B-side seed depends only on job key and B's Merkle root, not on A
+      miner/miner-base/src/miner_base/commitment_hash.py:61  return blake3(key + B_merkle_root).digest()
+  - A-side seed is chained after B: changing A does not change B's noise
+      miner/miner-base/src/miner_base/commitment_hash.py:65  return blake3(commitment_B + A_merkle_root).digest()
+  - gateway replaces the job only when the previous block hash changes (once per block)
+      miner/pearl-gateway/src/pearl_gateway/work_cache.py:30  or template.header.previous_block_hash
+  - the denoised product C is never checked by the verifier (see P01): a pure miner can skip denoising
+      zk-pow/src/api/verify.rs:101  pub fn verify_plain_proof(
+
+C. Shares count multiply-adds only
+  - jackpot target is scaled by tile size x dot-product length, nothing else
+      zk-pow/src/api/sanity_checks.rs:191  tile_size(config) * config.dot_product_length()
+  - after the rank-penalty fork: tile size x (dot length / r) x 128
+      zk-pow/src/api/sanity_checks.rs:195  tile_size(config) * (config.dot_product_length() / config.rank as usize) * PENALTY_BASE_RANK
+
+D. Hardware gate for the official useful miner
+  - CUDA kernels are compiled for one target only: Hopper sm_90a (H100/H200)
+      miner/pearl-gemm/setup.py:89  COMPUTE_CAPABILITY = "arch=compute_90a,code=sm_90a"
+  - the vLLM plugin refuses GPUs below compute capability 9
+      miner/vllm-miner/src/vllm_miner/vllm_scheme.py:60  return 9  # Hopper and up (required for pearl GEMM)
+  - README: only sm90 (H100 / H200) is supported
+      miner/README.md:46  > **GPU requirement:** `pearl-gemm` and `vllm-miner` tests require an NVIDIA GPU. Currently only **sm90** (H100 / H200) GPUs are supported.
+
+All 15 facts found.

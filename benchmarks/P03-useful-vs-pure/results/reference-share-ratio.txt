@@ -1,0 +1,33 @@
+P03 benchmark, part 3: expected share rate of a useful miner vs a pure miner on the same GPU.
+assumptions: GEMM efficiency 0.6, HBM efficiency 0.8, pure-miner overhead 2%
+
+Table 1. Best case for the useful miner: GPU saturated with prefill, 8192 tokens per step
+  model / simulated GPU        prompt len       R  pure/useful  R (5 ms/step)
+  Llama-3.1-8B / H100-SXM-80G         512   56.8%         1.8x          54.4%
+  Llama-3.1-8B / H100-SXM-80G        1024   55.9%         1.8x          53.6%
+  Llama-3.1-8B / H100-SXM-80G        4096   51.1%         2.0x          49.2%
+  Llama-3.1-8B / H100-SXM-80G        8192   45.8%         2.2x          44.3%
+  Llama-3.3-70B / H200-141G           512   61.0%         1.6x          60.8%
+  Llama-3.3-70B / H200-141G          1024   60.5%         1.7x          60.2%
+  Llama-3.3-70B / H200-141G          4096   57.5%         1.7x          57.3%
+  Llama-3.3-70B / H200-141G          8192   54.0%         1.9x          53.8%
+
+Table 2. Real workloads: R including idle time (R_wall), by request rate
+  Llama-3.1-8B / simulated H100-SXM-80G
+    workload                     1 req/s     4 req/s    16 req/s    64 req/s
+    Alpaca                          0.0%        0.0%        0.0%        0.0%
+    LMSYS-Chat-1M                   0.0%        0.0%        0.0%        0.0%
+    ShareGPT                        0.0%        0.0%        0.2%        4.5%
+    Azure-conv (Splitwise)          1.2%        4.6%       19.3%       28.0%
+    Azure-code (Splitwise)          1.8%        7.3%       29.9%       45.7%
+    Mooncake/Kimi                   6.4%       25.8%       26.8%       26.8%
+  Llama-3.3-70B / simulated H200-141G
+    workload                  0.25 req/s     1 req/s     4 req/s    16 req/s
+    Alpaca                          0.0%        0.0%        0.0%        0.0%
+    LMSYS-Chat-1M                   0.0%        0.1%        0.0%        0.1%
+    ShareGPT                        0.0%        0.2%        0.4%        4.1%
+    Azure-conv (Splitwise)          2.8%       11.8%       40.6%       41.0%
+    Azure-code (Splitwise)          4.4%       18.1%       54.5%       54.3%
+    Mooncake/Kimi                  15.8%       40.1%       42.1%       39.2%
+
+  pure miner advantage = 1 / R; R = 0 means the useful miner earns no shares at that load
