@@ -1,0 +1,9 @@
+# Pinned Pearl checkout (fetched by scripts/setup-pearl.sh)
+third_party/
+# Papers are not redistributed (fetched by scripts/fetch-papers.sh)
+papers/
+# Build outputs
+target/
+__pycache__/
+*.pyc
+.DS_Store
