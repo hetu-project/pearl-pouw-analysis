@@ -2,12 +2,14 @@
 
 问题：Pearl 的推理挖矿插件只在单步 token 数 m≥1024 时挖矿，对话类负载中参与挖矿的推理计算约 0–5%。
 
-本 benchmark 只需要 CPU，分两部分：
+问题报告：[`docs/problems/P02-mining-coverage.md`](../../docs/problems/P02-mining-coverage.md)
+
+本 benchmark 两部分都在 CPU 上运行，**不使用 GPU**：
 
 | 部分 | 程序 | 性质 |
 |---|---|---|
 | 1. 触发规则 × 官方模型各层 | `p02_trigger_table.py` | **确定结果**：直接加载 Pearl 插件自己的 `config.py` 和 `config.yaml`，调用 `should_use_noisy_gemm(m, n, k)`；各层量化方式读取官方 checkpoint 的 `config.json`（固定版本） |
-| 2. 负载仿真 | `p02_workload_sim.py` | **估算**：按公开负载的长度分布模拟 vLLM 调度，计算被挖的计算量占比 |
+| 2. 负载仿真 | `p02_workload_sim.py` | **CPU 仿真估算**：用 H100/H200 公开规格参数估算每步耗时，按公开负载的长度分布模拟 vLLM 调度，计算被挖的计算量占比。未在 GPU 上实测 |
 
 ## 运行
 
@@ -36,7 +38,7 @@
 
 ## 第 2 部分的假设（都是估算）
 
-模型与 GPU：8B 跑在 1×H100 SXM，70B 跑在 1×H200。int8/fp8 稠密峰值按 989.5 TMAC/s 计，bf16 减半，GEMM 效率 0.6，显存带宽效率 0.8。调度按 vLLM V1：每步 8192 token 预算，最多 1024 个序列，分块 prefill，按 KV 容量准入。请求按 Poisson 到达，模拟 300 秒。输入、输出长度服从对数正态分布（σ=1），均值或中位数与公开统计一致：
+仿真程序在 CPU 上运行，不使用 GPU。模拟的硬件：8B 模型 + 模拟 H100 SXM（80 GB、3.35 TB/s），70B 模型 + 模拟 H200（141 GB、4.8 TB/s），参数取自公开规格。int8/fp8 稠密峰值按 989.5 TMAC/s 计，bf16 减半；实际效率为假设值：GEMM 效率 0.6，显存带宽效率 0.8。调度按 vLLM V1：每步 8192 token 预算，最多 1024 个序列，分块 prefill，按 KV 容量准入。请求按 Poisson 到达，模拟 300 秒。输入、输出长度服从对数正态分布（σ=1），均值或中位数与公开统计一致：
 
 | 负载 | 输入 | 输出 | 来源 |
 |---|---|---|---|
