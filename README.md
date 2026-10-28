@@ -25,12 +25,15 @@ This repository does **not** modify Pearl. Benchmarks are small example programs
 |---|---|---|---|---|---|
 | P01 | Any matrix, including all-zero, can mine valid blocks; "usefulness" is not verified / 任意矩阵（包括全零矩阵）都能挖矿出块，"有用"无法验证 | Critical / 致命 | Confirmed by experiment / 实验证实 | [docs/problems/P01-any-matrix-mines.md](docs/problems/P01-any-matrix-mines.md) | [benchmarks/P01-any-matrix](benchmarks/P01-any-matrix) |
 
-More problems will be added one per commit. / 后续问题会逐个添加，每个问题一个 commit。
+Summary of all problems: [docs/problem-analysis.md](docs/problem-analysis.md). More problems will be added one per commit.
+
+问题汇总分析见 [docs/problem-analysis.md](docs/problem-analysis.md)。后续问题会逐个添加，每个问题一个 commit。
 
 ## Repository layout / 目录结构
 
 ```
 docs/
+  problem-analysis.md   问题汇总分析（从这里开始读）
   methodology.md        研究方法、问题条目格式、严重程度定义
   pearl-algorithm.md    Pearl 挖矿与验证算法（伪代码 + 参数说明）
   notes/                源码级研究笔记（按组件）
