@@ -9,4 +9,4 @@ __pycache__/
 .DS_Store
 
 # benchmark runs (reference results are committed separately)
-benchmarks/*/results/run-*.log
+benchmarks/*/results/run-*

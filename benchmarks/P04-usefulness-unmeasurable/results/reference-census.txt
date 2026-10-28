@@ -1,0 +1,35 @@
+Blocks analysed: 913 (heights 99000..134800), certificate versions {3: 913}
+Official useful miner (Pearl MinerSettings): r=128, rows=[0, 8], cols=<64 columns, [0, 1, 8, 9]...[248, 249]>
+Allowed n/k values (layer widths of 4 checkpoints / TP (1, 2, 4, 8)): 36 values, max 57344
+
+Table 1. Blocks passing each condition (cumulative)
+  S1 r = 128                             alone   913 (100.0%)   cumulative   913 (100.0%)
+  S2 official tile pattern (2 x 64)      alone    64 (  7.0%)   cumulative    64 (  7.0%)
+  S3 no MoE                              alone   913 (100.0%)   cumulative    64 (  7.0%)
+  S4 m >= 1024                           alone   908 ( 99.5%)   cumulative    64 (  7.0%)
+  S5 n and k are model layer widths      alone    24 (  2.6%)   cumulative     0 (  0.0%)
+
+  Possibly official useful mining: 0 / 913 = 0.00%  (95% upper bound 0.42%)
+
+Table 2. Most common parameter sets (k, r, tile h x w, m, n)
+  k=  8192 r= 128 tile=8x16   m=  4097 n=262144      58 blocks (  6.4%)
+  k= 32768 r= 128 tile=10x16  m=  5121 n=262144      40 blocks (  4.4%)
+  k=  8192 r= 128 tile=8x16   m= 16384 n=524288      36 blocks (  3.9%)
+  k=  8192 r= 128 tile=8x32   m= 16384 n= 65536      30 blocks (  3.3%)
+  k= 16384 r= 128 tile=8x16   m=  8192 n=131072      29 blocks (  3.2%)
+  k=  8192 r= 128 tile=8x16   m=  4096 n=258048      29 blocks (  3.2%)
+  k=  8192 r= 128 tile=8x16   m=  4096 n=262144      26 blocks (  2.8%)
+  k= 65536 r= 128 tile=10x16  m=  8322 n= 61440      23 blocks (  2.5%)
+  k=  2048 r= 128 tile=16x16  m= 16384 n= 16384      21 blocks (  2.3%)
+  k= 32768 r= 128 tile=8x16   m=  8192 n=131072      20 blocks (  2.2%)
+  k=  8192 r= 128 tile=8x16   m= 16384 n=131072      15 blocks (  1.6%)
+  k=  8192 r= 128 tile=8x32   m= 16384 n=131072      15 blocks (  1.6%)
+
+Table 3. Distribution of single parameters
+  k: 8192 (43.0%), 65536 (17.4%), 32768 (11.0%), 2048 (10.6%), 4096 (9.1%), 16384 (7.6%)
+  r: 128 (100.0%)
+  tile h x w: 8x16 (56.0%), 10x16 (16.5%), 8x32 (9.6%), 2x64 (7.8%), 16x16 (6.0%), 12x16 (1.5%)
+  m: min 512, median 8322, max 16777216
+  n: min 512, median 131072, max 16777216
+  k equal to a model layer width: 70.9%; n equal to a model layer width: 6.2%
+  proof size: {59560: 913}
