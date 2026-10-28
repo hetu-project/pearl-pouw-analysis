@@ -1,0 +1,175 @@
+
+===== Llama-3.1-8B =====
+TP=1: mineable share of linear MACs when m>=1024: 67.3%
+    qkv_proj      n=  6144 k=  4096 int7_layers= 16/32 -> MINE
+    o_proj        n=  4096 k=  4096 int7_layers= 32/32 -> MINE
+    gate_up_proj  n= 28672 k=  4096 int7_layers= 32/32 -> MINE
+    down_proj     n=  4096 k= 14336 int7_layers=  0/32 -> no
+TP=2: mineable share of linear MACs when m>=1024: 67.3%
+    qkv_proj      n=  3072 k=  4096 int7_layers= 16/32 -> MINE
+    o_proj        n=  4096 k=  2048 int7_layers= 32/32 -> MINE
+    gate_up_proj  n= 14336 k=  4096 int7_layers= 32/32 -> MINE
+    down_proj     n=  4096 k=  7168 int7_layers=  0/32 -> no
+TP=4: mineable share of linear MACs when m>=1024: 67.3%
+    qkv_proj      n=  1536 k=  4096 int7_layers= 16/32 -> MINE
+    o_proj        n=  4096 k=  1024 int7_layers= 32/32 -> MINE (k<2048: verifier would reject proof)
+    gate_up_proj  n=  7168 k=  4096 int7_layers= 32/32 -> MINE
+    down_proj     n=  4096 k=  3584 int7_layers=  0/32 -> no
+TP=8: mineable share of linear MACs when m>=1024: 59.6%
+    qkv_proj      n=   768 k=  4096 int7_layers= 16/32 -> MINE
+    o_proj        n=  4096 k=   512 int7_layers= 32/32 -> no
+    gate_up_proj  n=  3584 k=  4096 int7_layers= 32/32 -> MINE
+    down_proj     n=  4096 k=  1792 int7_layers=  0/32 -> no
+
+PREFILL (one step, B prompts of length L batched; m=B*L <= 8192)
+   L     B      m   mined/linear  mined/all(incl attn+lm_head)
+  128     1    128         0.0%         0.0%
+  128     2    256         0.0%         0.0%
+  128     4    512         0.0%         0.0%
+  128     8   1024        67.3%        67.1%
+  128    16   2048        67.3%        67.1%
+  128    64   8192        67.3%        67.1%
+  512     1    512         0.0%         0.0%
+  512     2   1024        67.3%        66.7%
+  512     4   2048        67.3%        66.7%
+  512     8   4096        67.3%        66.7%
+  512    16   8192        67.3%        66.7%
+ 1024     1   1024        67.3%        66.0%
+ 1024     2   2048        67.3%        66.0%
+ 1024     4   4096        67.3%        66.0%
+ 1024     8   8192        67.3%        66.0%
+ 2048     1   2048        67.3%        64.8%
+ 2048     2   4096        67.3%        64.8%
+ 2048     4   8192        67.3%        64.8%
+ 4096     1   4096        67.3%        62.5%
+ 4096     2   8192        67.3%        62.5%
+ 8192     1   8192        67.3%        58.3%
+
+DECODE (one step, B concurrent sequences, context c; m=B)
+    B     c   mined/linear  mined/all
+    1   512         0.0%         0.0%
+    1  2048         0.0%         0.0%
+    1  8192         0.0%         0.0%
+   32   512         0.0%         0.0%
+   32  2048         0.0%         0.0%
+   32  8192         0.0%         0.0%
+  128   512         0.0%         0.0%
+  128  2048         0.0%         0.0%
+  128  8192         0.0%         0.0%
+  256   512         0.0%         0.0%
+  256  2048         0.0%         0.0%
+  256  8192         0.0%         0.0%
+  512   512         0.0%         0.0%
+  512  2048         0.0%         0.0%
+  512  8192         0.0%         0.0%
+ 1023   512         0.0%         0.0%
+ 1023  2048         0.0%         0.0%
+ 1023  8192         0.0%         0.0%
+ 1024   512        67.3%        61.5%
+ 1024  2048        67.3%        58.4%
+ 1024  8192        67.3%        48.7%
+
+===== Llama-3.3-70B =====
+TP=1: mineable share of linear MACs when m>=1024: 67.6%
+    qkv_proj      n= 10240 k=  8192 int7_layers= 40/80 -> MINE
+    o_proj        n=  8192 k=  8192 int7_layers= 80/80 -> MINE
+    gate_up_proj  n= 57344 k=  8192 int7_layers= 80/80 -> MINE
+    down_proj     n=  8192 k= 28672 int7_layers=  0/80 -> no
+TP=2: mineable share of linear MACs when m>=1024: 67.6%
+    qkv_proj      n=  5120 k=  8192 int7_layers= 40/80 -> MINE
+    o_proj        n=  8192 k=  4096 int7_layers= 80/80 -> MINE
+    gate_up_proj  n= 28672 k=  8192 int7_layers= 80/80 -> MINE
+    down_proj     n=  8192 k= 14336 int7_layers=  0/80 -> no
+TP=4: mineable share of linear MACs when m>=1024: 67.6%
+    qkv_proj      n=  2560 k=  8192 int7_layers= 40/80 -> MINE
+    o_proj        n=  8192 k=  2048 int7_layers= 80/80 -> MINE
+    gate_up_proj  n= 14336 k=  8192 int7_layers= 80/80 -> MINE
+    down_proj     n=  8192 k=  7168 int7_layers=  0/80 -> no
+TP=8: mineable share of linear MACs when m>=1024: 67.6%
+    qkv_proj      n=  1280 k=  8192 int7_layers= 40/80 -> MINE
+    o_proj        n=  8192 k=  1024 int7_layers= 80/80 -> MINE (k<2048: verifier would reject proof)
+    gate_up_proj  n=  7168 k=  8192 int7_layers= 80/80 -> MINE
+    down_proj     n=  8192 k=  3584 int7_layers=  0/80 -> no
+
+PREFILL (one step, B prompts of length L batched; m=B*L <= 8192)
+   L     B      m   mined/linear  mined/all(incl attn+lm_head)
+  128     1    128         0.0%         0.0%
+  128     2    256         0.0%         0.0%
+  128     4    512         0.0%         0.0%
+  128     8   1024        67.6%        67.6%
+  128    16   2048        67.6%        67.6%
+  128    64   8192        67.6%        67.6%
+  512     1    512         0.0%         0.0%
+  512     2   1024        67.6%        67.3%
+  512     4   2048        67.6%        67.3%
+  512     8   4096        67.6%        67.3%
+  512    16   8192        67.6%        67.3%
+ 1024     1   1024        67.6%        67.0%
+ 1024     2   2048        67.6%        67.0%
+ 1024     4   4096        67.6%        67.0%
+ 1024     8   8192        67.6%        67.0%
+ 2048     1   2048        67.6%        66.3%
+ 2048     2   4096        67.6%        66.3%
+ 2048     4   8192        67.6%        66.3%
+ 4096     1   4096        67.6%        65.1%
+ 4096     2   8192        67.6%        65.1%
+ 8192     1   8192        67.6%        62.7%
+
+DECODE (one step, B concurrent sequences, context c; m=B)
+    B     c   mined/linear  mined/all
+    1   512         0.0%         0.0%
+    1  2048         0.0%         0.0%
+    1  8192         0.0%         0.0%
+   32   512         0.0%         0.0%
+   32  2048         0.0%         0.0%
+   32  8192         0.0%         0.0%
+  128   512         0.0%         0.0%
+  128  2048         0.0%         0.0%
+  128  8192         0.0%         0.0%
+  256   512         0.0%         0.0%
+  256  2048         0.0%         0.0%
+  256  8192         0.0%         0.0%
+  512   512         0.0%         0.0%
+  512  2048         0.0%         0.0%
+  512  8192         0.0%         0.0%
+ 1023   512         0.0%         0.0%
+ 1023  2048         0.0%         0.0%
+ 1023  8192         0.0%         0.0%
+ 1024   512        67.6%        66.0%
+ 1024  2048        67.6%        64.1%
+ 1024  8192        67.6%        57.7%
+
+KV-cache bound on concurrent decodes (rough):
+  Llama-3.1-8B on 1x80GB (weights 9.1GB), ctx=512: B_max ~ 862
+  Llama-3.1-8B on 1x80GB (weights 9.1GB), ctx=2048: B_max ~ 215
+  Llama-3.1-8B on 1x80GB (weights 9.1GB), ctx=8192: B_max ~ 53
+  Llama-3.3-70B on 1x141GB (weights 72.7GB), ctx=512: B_max ~ 293
+  Llama-3.3-70B on 1x141GB (weights 72.7GB), ctx=2048: B_max ~ 73
+  Llama-3.3-70B on 1x141GB (weights 72.7GB), ctx=8192: B_max ~ 18
+
+CONTINUOUS BATCHING toy sim (budget 8192 tok/step, max_num_seqs 1024)
+ model         prompt out  arrivals/step  tok/step  steps_mining  tokens_in_mining_steps  mined/linear
+ Llama-3.1-8B    512  256      0.05          36       0.1%           3.3%         2.2%
+ Llama-3.1-8B    512  256      0.20         158       2.0%          14.2%         9.6%
+ Llama-3.1-8B    512  256      1.00         767      25.9%          50.0%        33.7%
+ Llama-3.1-8B   2048  256      0.05         110       4.7%          89.5%        60.2%
+ Llama-3.1-8B   2048  256      0.20         475      18.5%          91.1%        61.3%
+ Llama-3.1-8B   2048  256      1.00        2313      64.4%          96.0%        64.6%
+ Llama-3.1-8B    256 1024      0.05          58       0.0%           0.0%         0.0%
+ Llama-3.1-8B    256 1024      0.20         247       0.0%           0.1%         0.1%
+ Llama-3.1-8B    256 1024      1.00        1196      87.4%          93.5%        62.9%
+ Llama-3.1-8B   4096  512      0.05         219       4.7%          89.7%        60.3%
+ Llama-3.1-8B   4096  512      0.20         948      18.6%          91.1%        61.3%
+ Llama-3.1-8B   4096  512      1.00        4616      73.2%          96.9%        65.3%
+ Llama-3.3-70B   512  256      0.05          36       0.1%           3.3%         2.2%
+ Llama-3.3-70B   512  256      0.20         158       2.0%          14.2%         9.6%
+ Llama-3.3-70B   512  256      1.00         767      25.9%          50.0%        33.8%
+ Llama-3.3-70B  2048  256      0.05         110       4.7%          89.5%        60.5%
+ Llama-3.3-70B  2048  256      0.20         475      18.5%          91.1%        61.6%
+ Llama-3.3-70B  2048  256      1.00        2313      64.4%          96.0%        65.0%
+ Llama-3.3-70B   256 1024      0.05          58       0.0%           0.0%         0.0%
+ Llama-3.3-70B   256 1024      0.20         247       0.0%           0.1%         0.1%
+ Llama-3.3-70B   256 1024      1.00        1196      87.4%          93.5%        63.3%
+ Llama-3.3-70B  4096  512      0.05         219       4.7%          89.7%        60.7%
+ Llama-3.3-70B  4096  512      0.20         948      18.6%          91.1%        61.6%
+ Llama-3.3-70B  4096  512      1.00        4616      73.2%          96.9%        65.6%

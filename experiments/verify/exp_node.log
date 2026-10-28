@@ -1,0 +1,36 @@
+[node] m=256 n=512 k=2048 r=128 h=4 w=8
+[node] mine (CPU reference miner, incl. random matrix gen): 21.079ms
+[node] PlainProof bincode bytes = 26193 | A: leaves=8 siblings=17 total_leaves=512 | B: leaves=16 siblings=13 total_leaves=1024
+[node] verify_plain_proof avg over 20: 376.056µs
+[2026-10-27T07:19:15Z INFO  zk_pow::circuit::pearl_circuit] Stark #0 proof time: 2.163228917s || num_rows: 8192
+[2026-10-27T07:19:17Z INFO  zk_pow::circuit::pearl_circuit] Recursion Circuit #1 prove time: 1.841696792s || proof size: 162438
+[2026-10-27T07:19:19Z INFO  zk_pow::circuit::pearl_circuit] Second recursion prove time: 2.035340583s || proof size: 59538
+[node] zk_prove_plain_proof #1 (incl. circuit build): 6.976431708s
+[2026-10-27T07:19:20Z INFO  zk_pow::circuit::pearl_circuit] Stark #0 proof time: 1.458800541s || num_rows: 8192
+[2026-10-27T07:19:21Z INFO  zk_pow::circuit::pearl_circuit] Recursion Circuit #1 prove time: 1.3397245s || proof size: 162438
+[2026-10-27T07:19:24Z INFO  zk_pow::circuit::pearl_circuit] Second recursion prove time: 2.653802333s || proof size: 59538
+[node] zk_prove_plain_proof #2 (cached circuits): 5.480376959s
+[node] public_data bytes = 164, proof_data bytes = 59560 (preamble 22 + plonky2 59538), 2nd proof_data bytes = 59560
+[node] proof_data identical across two proves: false
+[node] public_data identical across two proves: true
+[node] stark degree_bits = 13 (expected_num_rows = 3496), pow_bits=[18, 18, 22] rate_bits=[2, 3, 7]
+[node] verify_block fresh cache (compile verifier circuits + verify): 1.361241583s
+[node] verify_block_cached_circuits_only avg over 5: 5.085233ms
+       14.26 real        73.46 user         9.82 sys
+          3701719040  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+             1784789  page reclaims
+                   2  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   3  voluntary context switches
+              481909  involuntary context switches
+        970968754738  instructions retired
+        273407331547  cycles elapsed
+          5180756144  peak memory footprint

@@ -1,0 +1,59 @@
+==============================================================================
+Scenario (a): sudden hashrate drop from equilibrium
+==============================================================================
+
+-- hashrate drops to 50% (i.e. -50%) --
+   initial expected block time = 388 s (6.5 min)
+   analytic: block time within  25.0% of T (x=0.8):    9.7 days,    2857 blocks
+   analytic: block time within  11.1% of T (x=0.9):   15.4 days,    5017 blocks
+   analytic: block time within   5.3% of T (x=0.95):   20.6 days,    7178 blocks
+   analytic: block time within   1.0% of T (x=0.99):   32.2 days,   12196 blocks
+   MonteCarlo(20 runs) x>=0.9: median 5006 blocks, 15.4 days (range 13.5-16.2 d)
+   MonteCarlo(20 runs) x>=0.99: median 11039 blocks, 29.6 days (range 23.9-42.2 d)
+   in first 30 days: analytic 11243 blocks vs schedule 13361
+
+-- hashrate drops to 10% (i.e. -90%) --
+   initial expected block time = 1940 s (32.3 min)
+   analytic: block time within  25.0% of T (x=0.8):   25.1 days,    4689 blocks
+   analytic: block time within  11.1% of T (x=0.9):   30.8 days,    6850 blocks
+   analytic: block time within   5.3% of T (x=0.95):   36.0 days,    9011 blocks
+   analytic: block time within   1.0% of T (x=0.99):   47.5 days,   14028 blocks
+   MonteCarlo(20 runs) x>=0.9: median 7618 blocks, 32.8 days (range 31.3-35.5 d)
+   MonteCarlo(20 runs) x>=0.99: median 27896 blocks, 80.8 days (range 59.4-117.2 d)
+   in first 30 days: analytic 6547 blocks vs schedule 13361
+
+==============================================================================
+Scenario (b): launch at genesis difficulty (bits=0x1b00ffff = powLimit)
+==============================================================================
+
+Analytic fit (constant hashrate from t=0): H/H_genesis = 282,317
+   implied block time at day 5.9: 110 s
+   min-difficulty-rise bound: each block can raise difficulty by at most factor 1/(1-(T-1)/HL) = 1.000319
+   => catching up a factor X takes >= ln(X)*HL/(T-1) = 3134*ln(X) blocks
+      e.g. X=1e5 -> >= 36,078 blocks
+
+Monte Carlo (exact integer WTEMA + 1s/5min timestamp rules):
+   H/H_gen  blocks@5.9d  avg s/blk wk1  blocktime@5.9d  blocks@30d  days to x<=1.1
+     1e+02       15,203           37.9             113      27,587            15.8
+     1e+03       22,169           26.3             112      34,603            14.9
+     1e+04       29,379           20.0             111      41,719            16.4
+     3e+04       32,787           18.0             111      45,117            18.9
+     1e+05       36,430           16.2             110      48,674            16.2
+     3e+05       39,634           14.9             105      52,298            16.6
+     1e+06       43,440           13.7             106      56,077            15.7
+
+Ramp scenarios (hashrate grows geometrically, then flat):
+ H_start    H_end  ramp d  blocks@5.9d  blocks@30d  blocks@87d
+   1e+02    3e+05       3       38,563      52,125      77,670
+   1e+03    1e+06       7       35,583      55,902      81,438
+   1e+04    1e+06      14       33,191      55,749      81,415
+   1e+03    3e+06      30       25,318      56,091      84,771
+   1e+04    1e+07      60       30,595      50,467      88,343
+
+==============================================================================
+Quantization check: compact (23-bit, truncating) vs exact at equilibrium
+==============================================================================
+  H=    1e+03 start mantissa=0x418937: mean timestamp delta  194.0 s, mean expected solve  194.4 s (T=194)
+  H=  1.3e+03 start mantissa=0x32698c: mean timestamp delta  194.0 s, mean expected solve  194.4 s (T=194)
+  H=    3e+05 start mantissa=0x37ec8e: mean timestamp delta  194.0 s, mean expected solve  194.4 s (T=194)
+  H=  7.7e+05 start mantissa=0x15c9e1: mean timestamp delta  194.1 s, mean expected solve  194.5 s (T=194)

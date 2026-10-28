@@ -1,0 +1,112 @@
+
+running 1 test
+test rejects_dimension_wraparound_after_leaf_count_check ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+        0.01 real         0.00 user         0.00 sys
+             7159808  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 722  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                 506  involuntary context switches
+           120601120  instructions retired
+            42330408  cycles elapsed
+             6144336  peak memory footprint
+
+running 16 tests
+test ffi::mine::tests::test_build_matrix_proof_aligned_unchanged ... ok
+test ffi::mine::tests::test_moe_commitment_matches_verifier_non_aligned_routing ... ok
+test ffi::plain_proof::tests::both_proof_kinds_eligible_under_v3 ... ok
+test ffi::mine::tests::test_padded_blake3_hash_equals_merkle_root ... ok
+test ffi::mine::tests::test_build_matrix_proof_pads_to_chunk_boundary ... ok
+test ffi::plain_proof::tests::declared_tree_sizes_check_routing_tree_for_moe ... ok
+test ffi::plain_proof::tests::declared_tree_sizes_must_match_padded_leaf_counts ... ok
+test ffi::plain_proof::tests::dense_proof_eligible_under_both_versions ... ok
+test ffi::plain_proof::tests::deserialize_compat_rejects_garbage_and_trailing_bytes ... ok
+test ffi::plain_proof::tests::deserialize_compat_accepts_legacy_v1_format ... ok
+test ffi::plain_proof::tests::deserialize_compat_roundtrips_current_format ... ok
+test ffi::plain_proof::tests::min_cert_version_dense_is_v1_moe_is_v2 ... ok
+test ffi::plain_proof::tests::moe_proof_eligible_only_under_v2 ... ok
+test ffi::plain_proof::tests::seed_derivation_mapping ... ok
+test ffi::plain_proof::tests::unknown_cert_versions_rejected ... ok
+test ffi::mine::tests::test_verify_moe ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 68 filtered out; finished in 0.07s
+
+        0.07 real         0.07 user         0.02 sys
+            75415552  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                5813  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                1347  involuntary context switches
+          1343737139  instructions retired
+           325738706  cycles elapsed
+            73449880  peak memory footprint
+
+running 1 test
+test circuit::compat_test::test::test_proof_fixture ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 83 filtered out; finished in 1.09s
+
+        1.09 real         4.37 user         0.38 sys
+          1006731264  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               87982  page reclaims
+                   2  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   1  voluntary context switches
+               21914  involuntary context switches
+         58659293254  instructions retired
+         15888262606  cycles elapsed
+          1014482168  peak memory footprint
+
+running 1 test
+test circuit::compat_test::test::test_moe_proof_fixture ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 83 filtered out; finished in 0.95s
+
+        0.96 real         4.31 user         0.34 sys
+          1191919616  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               86087  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+               18464  involuntary context switches
+         58590870490  instructions retired
+         15589405103  cycles elapsed
+          1001784592  peak memory footprint
+DONE

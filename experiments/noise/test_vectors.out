@@ -1,0 +1,10 @@
+[OK] blake3(empty): af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262
+[OK] blake3(official len=2049)[:8]: 5f4d72f40d7a5f82
+[OK] SEED_SALT_A: 8249406ca0ed15169616f692fcf076f892dbdb2a7023b852f0d47719c390017b
+[OK] SEED_SALT_B: 11300632ec6301ca2be2af718b3f4d4f1ae9c63988e8cc044844301d71b89aa9
+[OK] Legacy b_noise_seed: add6f7ea5feebf89c8a77e2ebfa0d82442e7dbb0046dbd48971861d12fcb0177
+[OK] Legacy a_noise_seed: 483b07b6f73105030b9482255f37723f3fed69ae916724ee8291848b8c28794b
+[OK] Salted b_noise_seed: 60ed9b73c5a9599b200b6cd563e7f0d5d9a67d2402d85fd4ef966c580080d0e5
+[OK] Salted a_noise_seed: 301784168005ec833ab0aa60006f7fe7faaa95307d8c1fc6819b2ffdd717eccf
+[OK] SEED_SALT_A_U32[0..2]: ['0x6c404982', '0x1615eda0']
+ALL OK

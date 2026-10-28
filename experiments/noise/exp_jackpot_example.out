@@ -1,0 +1,45 @@
+# (a) worked example  h=2 w=4 k=64 r=32  (illustrative dims, not consensus-valid)
+job_key      = f33bd8f7421a4563b5938044500d549b07c1c90297da1bde25ca730e49b870b6
+hash_a(root) = a507588915a2cb5ca377de88b9289e9f19950553e99504e43e987346f4bd105a   (keyed blake3 of pad1024(A row-major), key=job_key)
+hash_b(root) = dc7170d70b18a40ee4370fc34af4d90430cf8c71f22bfcb41c52b8c2ddd4b9c7   (keyed blake3 of pad1024(B^T row-major), key=job_key)
+b_noise_seed = b7bd40032ec6e5036e8f3f5a44f85ed58b1459db8632ebefd463b5d718814d95   (V3 salted)
+a_noise_seed = 760707f8766c756f09193c1c1907b1c2e13b7872d44c4b9c7577681a8369cd16   (= jackpot key)
+tile rows of A = [3, 11], tile cols of B = [2, 3, 10, 11]
+E_AR pairs (first,second) for l=0..7: [(3, 16), (28, 5), (25, 26), (21, 29), (24, 26), (13, 6), (2, 12), (18, 12)]
+E_AL[row 3][0..8] = [29, 8, 22, -6, 7, -21, 21, 17]
+noise_A[row 3][0..8] = [8, 15, -14, -1, 39, -34, 35, 33]   (= E_AL[u][first_l] - E_AL[u][second_l])
+
+-- reduction at ll=32 (sum over l in [0,32))  -> word tid=0
+   acc[0] = [3141, 2217, -16, 2936]   as u32 hex = ['0xc45', '0x8a9', '0xfffffff0', '0xb78']
+   acc[1] = [2760, 440, 2503, 6960]   as u32 hex = ['0xac8', '0x1b8', '0x9c7', '0x1b30']
+   XOR of the 8 u32 = 0xffffe9e3
+   msg[0]: 0x0 -> rotl13 ^ xor = 0xffffe9e3
+
+-- reduction at ll=64 (sum over l in [0,64))  -> word tid=1
+   acc[0] = [-4161, -5742, 2275, 1173]   as u32 hex = ['0xffffefbf', '0xffffe992', '0x8e3', '0x495']
+   acc[1] = [-6343, 7026, 3125, 1340]   as u32 hex = ['0xffffe739', '0x1b72', '0xc35', '0x53c']
+   XOR of the 8 u32 = 0xffffff19
+   msg[1]: 0x0 -> rotl13 ^ xor = 0xffffff19
+
+jackpot_msg (16 x u32) = ['0xffffe9e3', '0xffffff19', '0x0', '0x0', '0x0', '0x0', '0x0', '0x0', '0x0', '0x0', '0x0', '0x0', '0x0', '0x0', '0x0', '0x0']
+hash_jackpot = blake3(msg_le, key=a_noise_seed) = 69c517045bd22c6c377305caabacb83b822311b531a06a6a613cc1639b36bfcb
+as LE uint256 = 0xcbbf369b63c13c616a6aa031b51123823bb8acabca0573376c2cd25b0417c569
+difficulty factor h*w*(k-k%r) = 512
+
+change A[0][0] (row not in tile) -> jackpot_msg unchanged on the same noise: True  (but hash_a and hence both seeds change)
+reverse l-order inside block [0,32) for all operands -> same jackpot_msg: True
+swap l=31 and l=32 (crosses the r boundary) -> same jackpot_msg: False
+
+# word usage: number of rotl13^xor folds per msg word
+k=  2048 r= 128: reductions=  16 folds per word=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+k=  4096 r= 128: reductions=  32 folds per word=[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+k=  8192 r= 128: reductions=  64 folds per word=[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+k=  2048 r=  32: reductions=  64 folds per word=[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+k= 65536 r= 128: reductions= 512 folds per word=[32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32]
+
+# (b) GPU TileHashAccumulator schedule emulation vs helper.rs
+compared 78 (K,R,bK) combos: mismatches=0
+(K not a multiple of bK is included, e.g. K=1088 with bK=128/256: GPU loads a zero-padded last tile; reductions stop at count*32 <= K)
+example K=2048 R=128 bK=128: first 5 GPU events (k_prefix, word) = [(128, 0), (256, 1), (384, 2), (512, 3), (640, 4)]
+example K=2048 R=256 bK=128: first 5 GPU events = [(256, 0), (512, 1), (768, 2), (1024, 3), (1280, 4)]
+example K=2048 R=64  bK=128: first 5 GPU events = [(64, 0), (128, 1), (192, 2), (256, 3), (320, 4)]

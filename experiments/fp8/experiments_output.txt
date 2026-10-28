@@ -1,0 +1,52 @@
+
+======================================================================
+E1  SampleLine: norm ~256, entry distribution, min-entropy estimate
+======================================================================
+mean line norm 255.77  min 248.76  max 263.53
+distinct FP8 values per entry: 120, Shannon H/entry=5.95 bits, min-entropy/entry=4.51 bits
+naive line min-entropy (32 x per-entry, ignores norm coupling) = 144.3 bits
+
+======================================================================
+E2  N = E F^T entry rms vs c^2/sqrt(r); check beta = alpha*l2*delta*sqrt(r)/c^2
+======================================================================
+rms(N)=11663.9   c^2/sqrt(r)=11585.2   peak|N|=43686.5  (Cauchy-Schwarz bound c^2=65536)
+delta=0.5: ||beta N||/||alpha X|| mean 0.502 (target 0.5), min 0.489 max 0.525
+   sigma (quantized units) = delta*alpha*l2 for gaussian row ~ 32.4
+delta=1.0: ||beta N||/||alpha X|| mean 1.005 (target 1.0), min 0.979 max 1.049
+   sigma (quantized units) = delta*alpha*l2 for gaussian row ~ 45.9
+
+======================================================================
+E3  FP8 rounding-error variance constant (whitepaper: ~2^-10.5 * (x^2+sigma^2))
+======================================================================
+x/sigma=0.0  E[T^2]/E[S^2] = 2^-10.48
+x/sigma=0.5  E[T^2]/E[S^2] = 2^-10.46
+x/sigma=1.0  E[T^2]/E[S^2] = 2^-10.48
+x/sigma=2.0  E[T^2]/E[S^2] = 2^-10.47
+x/sigma=4.0  E[T^2]/E[S^2] = 2^-10.53
+
+======================================================================
+E4  "B = 1 -> Q(B+E_B F_B^T)_ij = B_ij in ~10% of entries" (Sec 5.2)
+======================================================================
+delta=0.5 alpha=117.00 Q(alpha)=120  fraction unchanged = 0.055
+delta=1.0 alpha=67.50 Q(alpha)=64  fraction unchanged = 0.036
+
+======================================================================
+E5  Lambda(x,sigma) fixed-point log2 (Appendix C.5): one-sided error < 0.016
+======================================================================
+max(true - Lambda) = 0.01577  (bound 0.016);  max(Lambda - true) = -1.43e-06 (should be <= ~0)
+
+======================================================================
+E6  Appendix C.2 accumulator: small summands vanish below the grid 2^(eta-W)
+======================================================================
+W=13  exact=200704.060546875  device=200704.0  lost=0.060546875
+W=25  exact=200704.060546875  device=200704.046875  lost=0.013671875
+32 x (1.5*1.5): device(W=13)=72.0 exact=72.0
+random k=128 cells where W=13 and W=25 results differ: 197 / 200
+
+======================================================================
+E7  Liveness: an all-dense Gaussian row has how many idle entries?
+======================================================================
+delta=0.5: idle fraction = 0.00010  (eps_idle = 0.01562; threshold |x| >= 4*l2)
+delta=1.0: idle fraction = 0.00000  (eps_idle = 0.01562; threshold |x| >= 8*l2)
+student-t df=3, delta=0.5: idle fraction = 0.00621
+student-t df=2, delta=0.5: idle fraction = 0.00738

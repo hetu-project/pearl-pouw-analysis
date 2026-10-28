@@ -1,0 +1,35 @@
+K = 650226  (4y*365d*86400 / 194 = 650226.804)
+subsidy(1)      = 3229.6413 PRL  (= S/(K+1))
+subsidy(40000)  = 2866.1679 PRL
+subsidy(K)      = 807.4122 PRL
+
+H            floor-sum (PRL)          S*H/(H+K) (PRL)     diff (grains)   diff bound H
+1                   3229.64134063          3229.64134064            0.9          1
+10                 32295.96638753         32295.96638759            5.9         10
+1000             3224686.97502348       3224686.97502864          515.8       1000
+40000          121699269.51442283     121699269.51462273        19989.7      40000
+91630          259380526.67857465     259380526.67903203        45738.9      91630
+110000         303857010.94093418     303857010.94148320        54899.1     110000
+650226        1049999999.99674845    1050000000.00000000       325155.0     650226
+1300452       1399999999.99349976    1400000000.00000000       650015.0    1300452
+5000000       1858332746.31117845    1858332746.33616424      2498573.3    5000000
+
+Fraction of S issued at height H: H/(H+K)
+    1 y on schedule (H=  162,556):  20.00%
+    2 y on schedule (H=  325,113):  33.33%
+    4 y on schedule (H=  650,226):  50.00%
+    8 y on schedule (H=1,300,453):  66.67%
+   12 y on schedule (H=1,950,680):  75.00%
+   20 y on schedule (H=3,251,134):  83.33%
+   36 y on schedule (H=5,852,041):  90.00%
+  100 y on schedule (H=16,255,670):  96.15%
+
+Over-issuance vs on-schedule chain (height_sched = wall/T):
+case                                                                 issued        sched       excess  excess%S  h ahead
+public data: 40000 blocks at 5.9 days                              121.70M       8.45M     113.25M     5.39%   37,373
+MC startup (H/Hgen=3e5) 39634 @5.9d                                120.65M       8.45M     112.20M     5.34%   37,007
+MC ramp 1e3->1e6/7d: 55902 @30d                                    166.25M      42.28M     123.97M     5.90%   42,542
+git: DenseOnly 91630 ~ 2026-07-23 ~10:00Z (87.0 d)                 259.38M     118.15M     141.23M     6.73%   52,866
+git: SaltedSeed 99000 active by 2026-08-12 11:10Z (<=107.1 d)      277.49M     143.51M     133.98M     6.38%   51,307
+
+Note: the 'excess' is a time-shift of the fixed per-height schedule, not extra total supply: the cap S and per-height subsidy are unchanged; coins are issued earlier in wall-clock time.

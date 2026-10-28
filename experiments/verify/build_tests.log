@@ -1,0 +1,125 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling libc v0.2.185
+   Compiling quote v1.0.45
+   Compiling cfg-if v1.0.4
+   Compiling zerocopy v0.8.48
+   Compiling version_check v0.9.5
+   Compiling serde_core v1.0.228
+   Compiling autocfg v1.5.0
+   Compiling crossbeam-utils v0.8.21
+   Compiling shlex v1.3.0
+   Compiling find-msvc-tools v0.1.9
+   Compiling rayon-core v1.13.0
+   Compiling cc v1.2.60
+   Compiling serde v1.0.228
+   Compiling num-traits v0.2.19
+   Compiling either v1.15.0
+   Compiling syn v1.0.109
+   Compiling crunchy v0.2.4
+   Compiling static_assertions v1.1.0
+   Compiling syn v2.0.117
+   Compiling getrandom v0.2.17
+   Compiling rand_core v0.6.4
+   Compiling tiny-keccak v2.0.2
+   Compiling num-integer v0.1.46
+   Compiling serde_derive v1.0.228
+   Compiling crossbeam-epoch v0.9.18
+   Compiling byteorder v1.5.0
+   Compiling memchr v2.8.0
+   Compiling crossbeam-deque v0.8.6
+   Compiling proc-macro-error-attr v1.0.4
+   Compiling hex v0.4.3
+   Compiling strsim v0.11.1
+   Compiling ident_case v1.0.1
+   Compiling ppv-lite86 v0.2.21
+   Compiling once_cell v1.21.4
+   Compiling anyhow v1.0.102
+   Compiling rayon v1.12.0
+   Compiling rand_chacha v0.3.1
+   Compiling darling_core v0.23.0
+   Compiling rand v0.8.6
+   Compiling uint v0.9.5
+   Compiling aho-corasick v1.1.4
+   Compiling num-bigint v0.4.6
+   Compiling const-random-macro v0.1.16
+   Compiling blake3 v1.8.4
+   Compiling proc-macro-error v1.0.4
+   Compiling ahash v0.8.12
+   Compiling getrandom v0.3.4
+   Compiling regex-syntax v0.8.10
+   Compiling num-rational v0.4.2
+   Compiling darling_macro v0.23.0
+   Compiling regex-automata v0.4.14
+   Compiling const-random v0.1.18
+   Compiling num-complex v0.4.6
+   Compiling num-iter v0.1.45
+   Compiling atty v0.2.14
+   Compiling fixed-hash v0.7.0
+   Compiling constant_time_eq v0.4.2
+   Compiling unicode-width v0.1.14
+   Compiling arrayref v0.3.9
+   Compiling log v0.4.29
+   Compiling arrayvec v0.7.6
+   Compiling unicode-segmentation v1.13.2
+   Compiling textwrap v0.11.0
+   Compiling primitive-types v0.10.1
+   Compiling heck v0.3.3
+   Compiling num v0.4.3
+   Compiling unroll v0.1.5
+   Compiling darling v0.23.0
+   Compiling regex v1.12.3
+   Compiling itertools v0.11.0
+   Compiling tikv-jemalloc-sys v0.6.1+5.3.0-1-ge13ca993e8ccb9ba9847cc330696e02839f328f7
+   Compiling humantime v2.3.0
+   Compiling plonky2_util v1.0.0 (third_party/pearl/plonky2/util)
+   Compiling termcolor v1.4.1
+   Compiling zmij v1.0.21
+   Compiling ansi_term v0.12.1
+   Compiling bitflags v1.3.2
+   Compiling strsim v0.8.0
+   Compiling vec_map v0.8.2
+   Compiling serde_with_macros v3.18.0
+   Compiling clap v2.34.0
+   Compiling plonky2_field v1.0.0 (third_party/pearl/plonky2/field)
+   Compiling hashbrown v0.14.5
+   Compiling structopt-derive v0.4.18
+   Compiling keccak-hash v0.8.0
+   Compiling rand_core v0.9.5
+   Compiling plonky2_maybe_rayon v1.0.0 (third_party/pearl/plonky2/maybe_rayon)
+   Compiling serde_json v1.0.149
+   Compiling lazy_static v1.5.0
+   Compiling web-time v1.1.0
+   Compiling thiserror v1.0.69
+   Compiling rustc-hex v2.1.0
+   Compiling fixed-hash v0.8.0
+   Compiling rand_chacha v0.9.0
+   Compiling serde_with v3.18.0
+   Compiling env_logger v0.9.3
+   Compiling impl-serde v0.4.0
+   Compiling bincode v1.3.3
+   Compiling plonky2 v1.1.0 (third_party/pearl/plonky2/plonky2)
+   Compiling structopt v0.3.26
+   Compiling thiserror-impl v1.0.69
+   Compiling is-terminal v0.4.17
+   Compiling itoa v1.0.18
+   Compiling sorted-vec v0.8.10
+   Compiling env_logger v0.10.2
+   Compiling primitive-types v0.12.2
+   Compiling rand v0.9.4
+   Compiling layout-macro v0.1.0 (third_party/pearl/zk-pow/src/circuit/layout_macro)
+   Compiling itertools v0.14.0
+   Compiling base64 v0.21.7
+   Compiling pearl-blake3 v0.1.0 (third_party/pearl/pearl-blake3)
+   Compiling starky v1.1.0 (third_party/pearl/plonky2/starky)
+   Compiling tikv-jemallocator v0.6.1
+   Compiling zk-pow v0.1.0 (third_party/pearl/zk-pow)
+    Finished `release` profile [optimized] target(s) in 56.04s
+  Executable unittests src/lib.rs (target/release/deps/zk_pow-8d1741a6246773ae)
+  Executable unittests src/bin/build_cache.rs (target/release/deps/build_cache-fe7eaac6ca639697)
+  Executable unittests src/bin/prove_verify.rs (target/release/deps/prove_verify-38dd35a594fce656)
+  Executable tests/cache_test.rs (target/release/deps/cache_test-2221cf22b904c45c)
+  Executable tests/moe_test.rs (target/release/deps/moe_test-556aec225699ed84)
+  Executable tests/plain_proof_dimension_wraparound.rs (target/release/deps/plain_proof_dimension_wraparound-da879af188b8e96e)
+cargo +1.88.0 test --release --locked --no-run  254.63s user 28.45s system 498% cpu 56.730 total
+EXIT 0

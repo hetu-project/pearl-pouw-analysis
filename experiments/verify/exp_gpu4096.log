@@ -1,0 +1,36 @@
+[gpu4096] m=256 n=256 k=4096 r=128 h=2 w=64
+[gpu4096] mine (CPU reference miner, incl. random matrix gen): 34.407917ms
+[gpu4096] PlainProof bincode bytes = 277633 | A: leaves=8 siblings=10 total_leaves=1024 | B: leaves=256 siblings=64 total_leaves=1024
+[gpu4096] verify_plain_proof avg over 20: 1.620993ms
+[2026-10-27T07:19:34Z INFO  zk_pow::circuit::pearl_circuit] Stark #0 proof time: 6.765356416s || num_rows: 65536
+[2026-10-27T07:19:37Z INFO  zk_pow::circuit::pearl_circuit] Recursion Circuit #1 prove time: 3.089989834s || proof size: 171078
+[2026-10-27T07:19:39Z INFO  zk_pow::circuit::pearl_circuit] Second recursion prove time: 1.654681417s || proof size: 59538
+[gpu4096] zk_prove_plain_proof #1 (incl. circuit build): 12.819795917s
+[2026-10-27T07:19:46Z INFO  zk_pow::circuit::pearl_circuit] Stark #0 proof time: 7.368056041s || num_rows: 65536
+[2026-10-27T07:19:50Z INFO  zk_pow::circuit::pearl_circuit] Recursion Circuit #1 prove time: 3.478503083s || proof size: 171078
+[2026-10-27T07:19:53Z INFO  zk_pow::circuit::pearl_circuit] Second recursion prove time: 3.050483667s || proof size: 59538
+[gpu4096] zk_prove_plain_proof #2 (cached circuits): 14.122671166s
+[gpu4096] public_data bytes = 164, proof_data bytes = 59560 (preamble 22 + plonky2 59538), 2nd proof_data bytes = 59560
+[gpu4096] proof_data identical across two proves: false
+[gpu4096] public_data identical across two proves: true
+[gpu4096] stark degree_bits = 16 (expected_num_rows = 36488), pow_bits=[18, 18, 22] rate_bits=[1, 3, 7]
+[gpu4096] verify_block fresh cache (compile verifier circuits + verify): 1.878903917s
+[gpu4096] verify_block_cached_circuits_only avg over 5: 4.829133ms
+       29.12 real       176.66 user        17.33 sys
+          4552916992  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+             3088993  page reclaims
+                   1  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   3  voluntary context switches
+              946943  involuntary context switches
+       2198303938593  instructions retired
+        616731092301  cycles elapsed
+          8969313144  peak memory footprint

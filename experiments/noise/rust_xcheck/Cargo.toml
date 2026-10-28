@@ -1,0 +1,9 @@
+[package]
+name = "rust_xcheck"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+zk-pow = { path = "../../../third_party/pearl/zk-pow" }
+
+[workspace]

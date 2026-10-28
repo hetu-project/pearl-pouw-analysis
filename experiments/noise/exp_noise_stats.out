@@ -1,0 +1,56 @@
+# Pearl noise statistics  r=128 k=2048 rows_sampled=256
+
+## 1. sparse +-1 pairs (first, second), pooled over 30 seeds x 2048 columns
+first: min/max count over 128 values = 415/548 (uniform expectation 480.0)
+second: min/max count = 425/533
+delta = first^second: support = [1, 127], #values=127, min/max count = 434/526 (expectation 483.8)
+independence chi^2 of (first//16, delta//16) 8x8 table = 32.9 (dof 49)
+identical columns (same ordered pair) per seed: mean=127.1 (birthday estimate k^2/(2 r (r-1)) = 129.0)
+negated columns (pair (f,s) and (s,f)) per seed: mean=127.5
+vertex degree (#columns touching an index) min over seeds=14, max=54, mean=2k/r=32
+connected components of the pair graph on r vertices: Counter({1: 30})
+=> rank(E_AR) over Q = r - #components (graph incidence matrix) : Counter({127: 30})
+check delta-1 == floor((r-1)*u/2^32) on seed0: 2048/2048
+
+## 2. value distributions (seed 0, a-side)
+E_AL values: support [-32, 31], #distinct=64, min/max count=462/562 (expect 512 each)
+E_A = E_AL*E_AR values: support [-63, 63], #distinct=127
+  mean=-0.040 var=680.0 (iid-difference model: 0, 2*(64^2-1)/12=682.5)
+  value : empirical freq  vs triangular (64-|d|)/4096
+   -63 : 0.00026 vs 0.00024
+   -62 : 0.00048 vs 0.00049
+   -32 : 0.00785 vs 0.00781
+    -1 : 0.01542 vs 0.01538
+     0 : 0.01554 vs 0.01562
+     1 : 0.01566 vs 0.01538
+    32 : 0.00782 vs 0.00781
+    62 : 0.00050 vs 0.00049
+    63 : 0.00025 vs 0.00024
+  total-variation distance to triangular = 0.0070
+  P(E_A == 0) = 0.01554
+
+## 3. ranks (mod p = 2^31-1, equals rank over Q with high probability)
+column sums of E_AR (all should be 0): {0}
+rank(E_AL) [256x128] = 128
+rank(E_AR) [128x512] = 127
+rank(E_A)  [192x512] = 127
+note: 1^T E_AR = 0 (every column is e_f - e_s), so rows of E_A lie in the (128-1)-dim row space of E_AR
+
+## 4. correlations (seed 0, E_A with 256 rows x 2048 cols)
+column-column Pearson over the 256 rows, 4000 random column pairs:
+  same index set (identical pair)        : n=0
+  share an index with same sign          : n=62 mean=+0.501 sd=0.038 min=+0.392 max=+0.571
+  share an index with opposite sign      : n=51 mean=-0.504 sd=0.035 min=-0.562 max=-0.409
+  disjoint index pairs                   : n=3887 mean=-0.001 sd=0.063 min=-0.237 max=+0.218
+  fraction of random pairs sharing an index: 0.0283 (approx 4/r = 0.0312)
+  exhaustive: column pairs sharing >=1 index = 65354 of 2096128 (0.0312)
+row-row Pearson over 2048 columns, 300 random row pairs: n=300 mean=+0.001 sd=0.090 min=-0.251 max=+0.262 (1/sqrt(k)=0.022, 1/sqrt(r)=0.088)
+within-row lag-1 correlation (32 rows): n=32 mean=+0.005 sd=0.021 min=-0.046 max=+0.045
+
+## 5. B side (seed 0): E_B^T rows = E_BR^T[col][f_l] - E_BR^T[col][s_l]
+E_B values support [-63, 63], P(0)=0.01617
+E_AR pairs vs E_BL pairs identical positions (seed0, same key): 1/2048 (labels differ: A_tensor vs B_tensor)
+
+## 6. A + E_A range with int7 data
+miner int7 [-64,63] (noisy_gemm.py:156-164): analytic range [-127, 126], adversarial(A=const extreme) observed [-127, 126], random-A observed [-125, 126]; int8 = [-128, 127]
+verifier-accepted [-64,64] (verify.rs:113-118, mine.rs:15-16): analytic range [-127, 127], adversarial(A=const extreme) observed [-127, 127], random-A observed [-126, 126]; int8 = [-128, 127]
