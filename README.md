@@ -24,6 +24,7 @@ This repository does **not** modify Pearl. Benchmarks are small example programs
 | # | Problem | Severity | Status | Docs | Benchmark |
 |---|---|---|---|---|---|
 | P01 | Any matrix, including all-zero, can mine valid blocks; "usefulness" is not verified / 任意矩阵（包括全零矩阵）都能挖矿出块，"有用"无法验证 | Critical / 致命 | Confirmed by experiment / 实验证实 | [docs/problems/P01-any-matrix-mines.md](docs/problems/P01-any-matrix-mines.md) | [benchmarks/P01-any-matrix](benchmarks/P01-any-matrix) |
+| P02 | Useful-mining coverage is low: only steps with ≥1024 tokens mine; about 0–5% of inference compute on chat workloads / 有用挖矿覆盖率低：单步 ≥1024 个 token 才挖，对话类负载约 0–5% | Serious / 严重 | Rule confirmed by code; ratios estimated, GPU measurement pending / 规则由代码证实，比例为估算，待 GPU 实测 | — | [benchmarks/P02-mining-coverage](benchmarks/P02-mining-coverage) |
 
 Summary of all problems: [docs/problem-analysis.md](docs/problem-analysis.md). More problems will be added one per commit.
 

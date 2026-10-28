@@ -1,0 +1,43 @@
+# pearl @156ef9a8, Wed Oct 28 15:24:53 CST 2026
+Trigger rule: Pearl miner/vllm-miner/src/vllm_miner/config.py -> should_use_noisy_gemm(m, n, k)
+  thresholds from config.yaml: min_m=1024 min_n=256 min_k=1024
+  m = tokens scheduled in this forward step (prefill chunk tokens + one per decoding sequence)
+
+=== Llama-3.1-8B-Instruct-pearl: 32 layers, hidden 4096, intermediate 14336
+    lm_head scheme: bf16 (never mines); attention QK^T/PV: not a plugin GEMM (never mines)
+
+  Table 1. Linear layers (TP=1): checkpoint scheme and whether Pearl's trigger fires at m
+  layer              n      k  int7 (mineable) layers   other layers         m=1     m=8    m=64   m=256   m=512  m=1023  m=1024  m=2048  m=8192
+  qkv_proj        6144   4096  16-31                    0-15 (float8)         no      no      no      no      no      no    mine    mine    mine
+  o_proj          4096   4096  0-31                     -                     no      no      no      no      no      no    mine    mine    mine
+  gate_up_proj   28672   4096  0-31                     -                     no      no      no      no      no      no    mine    mine    mine
+  down_proj       4096  14336  -                        0-31 (float8)         no      no      no      no      no      no   (n/a)   (n/a)   (n/a)
+  ('mine': trigger fires and the layer is int7; '(n/a)': trigger would fire but the layer is not int7)
+
+  Table 2. Share of transformer linear-layer MACs that go through noisy GEMM, by m and TP degree
+    TP     m=1     m=8    m=64   m=256   m=512  m=1023  m=1024  m=2048  m=8192
+     1    0.0%    0.0%    0.0%    0.0%    0.0%    0.0%   67.3%   67.3%   67.3%
+     2    0.0%    0.0%    0.0%    0.0%    0.0%    0.0%   67.3%   67.3%   67.3%
+     4    0.0%    0.0%    0.0%    0.0%    0.0%    0.0%   67.3%   67.3%   67.3%
+     8    0.0%    0.0%    0.0%    0.0%    0.0%    0.0%   59.6%   59.6%   59.6%
+  (lm_head and attention are excluded from the denominator; including them lowers every value)
+
+=== Llama-3.3-70B-Instruct-pearl: 80 layers, hidden 8192, intermediate 28672
+    lm_head scheme: bf16 (never mines); attention QK^T/PV: not a plugin GEMM (never mines)
+
+  Table 1. Linear layers (TP=1): checkpoint scheme and whether Pearl's trigger fires at m
+  layer              n      k  int7 (mineable) layers   other layers         m=1     m=8    m=64   m=256   m=512  m=1023  m=1024  m=2048  m=8192
+  qkv_proj       10240   8192  40-79                    0-39 (float8)         no      no      no      no      no      no    mine    mine    mine
+  o_proj          8192   8192  0-79                     -                     no      no      no      no      no      no    mine    mine    mine
+  gate_up_proj   57344   8192  0-79                     -                     no      no      no      no      no      no    mine    mine    mine
+  down_proj       8192  28672  -                        0-79 (float8)         no      no      no      no      no      no   (n/a)   (n/a)   (n/a)
+  ('mine': trigger fires and the layer is int7; '(n/a)': trigger would fire but the layer is not int7)
+
+  Table 2. Share of transformer linear-layer MACs that go through noisy GEMM, by m and TP degree
+    TP     m=1     m=8    m=64   m=256   m=512  m=1023  m=1024  m=2048  m=8192
+     1    0.0%    0.0%    0.0%    0.0%    0.0%    0.0%   67.6%   67.6%   67.6%
+     2    0.0%    0.0%    0.0%    0.0%    0.0%    0.0%   67.6%   67.6%   67.6%
+     4    0.0%    0.0%    0.0%    0.0%    0.0%    0.0%   67.6%   67.6%   67.6%
+     8    0.0%    0.0%    0.0%    0.0%    0.0%    0.0%   67.6%   67.6%   67.6%
+  (lm_head and attention are excluded from the denominator; including them lowers every value)
+

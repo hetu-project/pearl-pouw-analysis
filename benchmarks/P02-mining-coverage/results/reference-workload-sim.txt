@@ -1,0 +1,153 @@
+P02 benchmark, part 2: useful-mining coverage under public workload length distributions, and
+EFF_TC=0.6 EFF_BW=0.8 PURE_OVH=0.02 budget=8192 max_seqs=1024 sigma=1.0
+
+== D11 static: useful miner in best case (saturated prefill, m=8192) vs pure miner, same GPU
+  Llama-3.1-8B   H100-SXM-80G  prompt L=  512 T_FIXED=  0ms : lottery-MAC/s ratio useful/pure =  56.8%   (mined/all MACs 66.7%)
+  Llama-3.1-8B   H100-SXM-80G  prompt L=  512 T_FIXED=  5ms : lottery-MAC/s ratio useful/pure =  54.4%   (mined/all MACs 66.7%)
+  Llama-3.1-8B   H100-SXM-80G  prompt L= 1024 T_FIXED=  0ms : lottery-MAC/s ratio useful/pure =  55.9%   (mined/all MACs 66.0%)
+  Llama-3.1-8B   H100-SXM-80G  prompt L= 1024 T_FIXED=  5ms : lottery-MAC/s ratio useful/pure =  53.6%   (mined/all MACs 66.0%)
+  Llama-3.1-8B   H100-SXM-80G  prompt L= 4096 T_FIXED=  0ms : lottery-MAC/s ratio useful/pure =  51.1%   (mined/all MACs 62.5%)
+  Llama-3.1-8B   H100-SXM-80G  prompt L= 4096 T_FIXED=  5ms : lottery-MAC/s ratio useful/pure =  49.2%   (mined/all MACs 62.5%)
+  Llama-3.1-8B   H100-SXM-80G  prompt L= 8192 T_FIXED=  0ms : lottery-MAC/s ratio useful/pure =  45.8%   (mined/all MACs 58.3%)
+  Llama-3.1-8B   H100-SXM-80G  prompt L= 8192 T_FIXED=  5ms : lottery-MAC/s ratio useful/pure =  44.3%   (mined/all MACs 58.3%)
+  Llama-3.3-70B  H200-141G     prompt L=  512 T_FIXED=  0ms : lottery-MAC/s ratio useful/pure =  61.0%   (mined/all MACs 67.3%)
+  Llama-3.3-70B  H200-141G     prompt L=  512 T_FIXED=  5ms : lottery-MAC/s ratio useful/pure =  60.8%   (mined/all MACs 67.3%)
+  Llama-3.3-70B  H200-141G     prompt L= 1024 T_FIXED=  0ms : lottery-MAC/s ratio useful/pure =  60.5%   (mined/all MACs 67.0%)
+  Llama-3.3-70B  H200-141G     prompt L= 1024 T_FIXED=  5ms : lottery-MAC/s ratio useful/pure =  60.2%   (mined/all MACs 67.0%)
+  Llama-3.3-70B  H200-141G     prompt L= 4096 T_FIXED=  0ms : lottery-MAC/s ratio useful/pure =  57.5%   (mined/all MACs 65.1%)
+  Llama-3.3-70B  H200-141G     prompt L= 4096 T_FIXED=  5ms : lottery-MAC/s ratio useful/pure =  57.3%   (mined/all MACs 65.1%)
+  Llama-3.3-70B  H200-141G     prompt L= 8192 T_FIXED=  0ms : lottery-MAC/s ratio useful/pure =  54.0%   (mined/all MACs 62.7%)
+  Llama-3.3-70B  H200-141G     prompt L= 8192 T_FIXED=  5ms : lottery-MAC/s ratio useful/pure =  53.8%   (mined/all MACs 62.7%)
+  KV capacity Llama-3.1-8B on H100-SXM-80G: 449,905 tokens
+  KV capacity Llama-3.3-70B on H200-141G: 156,700 tokens
+
+== D10/D11 workload simulation (time domain, 300 s, Poisson arrivals)
+
+-- T_FIXED = 0 ms/step, prefix-cache hit 0
+model/GPU                workload                  req/s  outTok/s   busy stepsMine timeMine mined/lin mined/all  R_busy  R_wall
+Llama-3.1-8B/H100        Alpaca                     1.00        58  16.1%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.1-8B/H100        Alpaca                     4.00       231  49.6%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.1-8B/H100        Alpaca                    16.00       890  93.5%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.1-8B/H100        Alpaca                    64.00      3685 100.0%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.1-8B/H100        LMSYS-Chat-1M              1.00       213  47.7%      0.0%     0.0%      1.8%      1.7%    0.0%    0.0%
+Llama-3.1-8B/H100        LMSYS-Chat-1M              4.00       838  92.1%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.1-8B/H100        LMSYS-Chat-1M             16.00      3263 100.0%      0.0%     0.0%      0.1%      0.1%    0.0%    0.0%
+Llama-3.1-8B/H100        LMSYS-Chat-1M             64.00     13479 100.0%      0.0%     0.1%      0.2%      0.2%    0.0%    0.0%
+Llama-3.1-8B/H100        ShareGPT                   1.00       334  65.8%      0.0%     0.1%      2.9%      2.7%    0.0%    0.0%
+Llama-3.1-8B/H100        ShareGPT                   4.00      1310  98.1%      0.0%     0.1%      1.3%      1.2%    0.0%    0.0%
+Llama-3.1-8B/H100        ShareGPT                  16.00      5117 100.0%      0.0%     0.4%      1.7%      1.6%    0.2%    0.2%
+Llama-3.1-8B/H100        ShareGPT                  64.00     19846 100.0%      5.9%    15.8%     12.7%     11.9%    4.5%    4.5%
+Llama-3.1-8B/H100        Azure-conv (Splitwise)     1.00       211  50.6%      0.3%     5.4%     50.3%     45.6%    2.3%    1.2%
+Llama-3.1-8B/H100        Azure-conv (Splitwise)     4.00       831  95.2%      0.8%    10.8%     50.8%     46.9%    4.8%    4.6%
+Llama-3.1-8B/H100        Azure-conv (Splitwise)    16.00      3222 100.0%      7.9%    44.8%     54.6%     50.5%   19.3%   19.3%
+Llama-3.1-8B/H100        Azure-conv (Splitwise)    64.00      4033 100.0%     41.3%    73.6%     62.4%     57.5%   28.0%   28.0%
+Llama-3.1-8B/H100        Azure-code (Splitwise)     1.00        21  10.4%      3.4%    40.0%     60.5%     54.1%   17.2%    1.8%
+Llama-3.1-8B/H100        Azure-code (Splitwise)     4.00        85  37.7%      3.9%    44.0%     61.7%     55.5%   19.3%    7.3%
+Llama-3.1-8B/H100        Azure-code (Splitwise)    16.00       326  92.3%      9.8%    71.2%     64.3%     58.0%   32.5%   29.9%
+Llama-3.1-8B/H100        Azure-code (Splitwise)    64.00       476 100.0%     99.5%   100.0%     67.3%     60.3%   45.7%   45.7%
+Llama-3.1-8B/H100        Mooncake/Kimi              1.00       180  58.8%      1.1%    28.5%     65.4%     50.8%   10.8%    6.4%
+Llama-3.1-8B/H100        Mooncake/Kimi              4.00       667  99.9%     19.9%    75.3%     66.1%     50.8%   25.9%   25.8%
+Llama-3.1-8B/H100        Mooncake/Kimi             16.00       660 100.0%     35.5%    79.4%     66.3%     51.0%   26.8%   26.8%
+Llama-3.1-8B/H100        Mooncake/Kimi             64.00       737 100.0%     34.3%    78.2%     66.2%     51.6%   26.8%   26.8%
+Llama-3.3-70B/H200       Alpaca                     0.25        14  22.4%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.3-70B/H200       Alpaca                     1.00        58  67.6%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.3-70B/H200       Alpaca                     4.00       231  98.7%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.3-70B/H200       Alpaca                    16.00       888 100.0%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.3-70B/H200       LMSYS-Chat-1M              0.25        50  62.6%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.3-70B/H200       LMSYS-Chat-1M              1.00       204  99.1%      0.0%     0.1%      1.9%      1.9%    0.1%    0.1%
+Llama-3.3-70B/H200       LMSYS-Chat-1M              4.00       825  99.9%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.3-70B/H200       LMSYS-Chat-1M             16.00      3210 100.0%      0.0%     0.1%      0.1%      0.1%    0.1%    0.1%
+Llama-3.3-70B/H200       ShareGPT                   0.25        79  77.1%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.3-70B/H200       ShareGPT                   1.00       317 100.0%      0.0%     0.3%      3.1%      3.0%    0.2%    0.2%
+Llama-3.3-70B/H200       ShareGPT                   4.00      1275 100.0%      0.1%     0.9%      1.8%      1.8%    0.4%    0.4%
+Llama-3.3-70B/H200       ShareGPT                  16.00      4281 100.0%      1.5%     9.3%      5.4%      5.3%    4.1%    4.1%
+Llama-3.3-70B/H200       Azure-conv (Splitwise)     0.25        49  65.2%      0.4%     8.5%     52.3%     50.4%    4.3%    2.8%
+Llama-3.3-70B/H200       Azure-conv (Splitwise)     1.00       200  99.4%      1.4%    23.8%     53.0%     50.4%   11.9%   11.8%
+Llama-3.3-70B/H200       Azure-conv (Splitwise)     4.00       563 100.0%     15.1%    76.6%     60.1%     57.7%   40.6%   40.6%
+Llama-3.3-70B/H200       Azure-conv (Splitwise)    16.00       562 100.0%     15.8%    77.6%     60.6%     58.0%   41.0%   41.0%
+Llama-3.3-70B/H200       Azure-code (Splitwise)     0.25         5  17.0%      3.5%    49.8%     61.4%     58.2%   25.7%    4.4%
+Llama-3.3-70B/H200       Azure-code (Splitwise)     1.00        21  60.6%      5.0%    58.5%     62.5%     58.9%   30.0%   18.1%
+Llama-3.3-70B/H200       Azure-code (Splitwise)     4.00        51  99.9%     87.7%    99.6%     67.5%     63.7%   54.6%   54.5%
+Llama-3.3-70B/H200       Azure-code (Splitwise)    16.00        51 100.0%     90.1%    99.6%     67.5%     63.5%   54.3%   54.3%
+Llama-3.3-70B/H200       Mooncake/Kimi              0.25        43  75.6%      1.5%    44.1%     65.9%     57.1%   20.9%   15.8%
+Llama-3.3-70B/H200       Mooncake/Kimi              1.00        98 100.0%     12.8%    84.9%     66.4%     57.4%   40.1%   40.1%
+Llama-3.3-70B/H200       Mooncake/Kimi              4.00       101 100.0%     16.0%    87.2%     66.2%     58.0%   42.1%   42.1%
+Llama-3.3-70B/H200       Mooncake/Kimi             16.00       113 100.0%     10.8%    81.6%     66.0%     57.5%   39.2%   39.2%
+
+-- T_FIXED = 5 ms/step, prefix-cache hit 0
+model/GPU                workload                  req/s  outTok/s   busy stepsMine timeMine mined/lin mined/all  R_busy  R_wall
+Llama-3.1-8B/H100        Alpaca                     1.00        58  37.2%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.1-8B/H100        Alpaca                     4.00       231  84.6%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.1-8B/H100        Alpaca                    16.00       890  99.9%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.1-8B/H100        Alpaca                    64.00      3680 100.0%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.1-8B/H100        LMSYS-Chat-1M              1.00       210  83.7%      0.0%     0.0%      1.8%      1.7%    0.0%    0.0%
+Llama-3.1-8B/H100        LMSYS-Chat-1M              4.00       833  99.9%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.1-8B/H100        LMSYS-Chat-1M             16.00      3246 100.0%      0.0%     0.0%      0.1%      0.1%    0.0%    0.0%
+Llama-3.1-8B/H100        LMSYS-Chat-1M             64.00     13392 100.0%      0.1%     0.2%      0.4%      0.3%    0.1%    0.1%
+Llama-3.1-8B/H100        ShareGPT                   1.00       325  95.0%      0.0%     0.0%      2.9%      2.8%    0.0%    0.0%
+Llama-3.1-8B/H100        ShareGPT                   4.00      1300  99.9%      0.0%     0.1%      1.5%      1.4%    0.0%    0.0%
+Llama-3.1-8B/H100        ShareGPT                  16.00      5079 100.0%      0.1%     0.5%      1.8%      1.7%    0.2%    0.2%
+Llama-3.1-8B/H100        ShareGPT                  64.00     16218 100.0%     11.2%    19.8%     17.0%     16.0%    4.9%    4.9%
+Llama-3.1-8B/H100        Azure-conv (Splitwise)     1.00       207  85.0%      0.5%     3.5%     50.5%     45.7%    1.4%    1.2%
+Llama-3.1-8B/H100        Azure-conv (Splitwise)     4.00       825  99.9%      2.0%    11.5%     51.2%     47.3%    4.6%    4.6%
+Llama-3.1-8B/H100        Azure-conv (Splitwise)    16.00      3172 100.0%     21.1%    53.6%     57.3%     53.0%   20.2%   20.2%
+Llama-3.1-8B/H100        Azure-conv (Splitwise)    64.00      3674 100.0%     42.1%    71.2%     62.5%     57.7%   25.6%   25.6%
+Llama-3.1-8B/H100        Azure-code (Splitwise)     1.00        21  19.8%      3.6%    22.7%     60.5%     54.1%    9.1%    1.8%
+Llama-3.1-8B/H100        Azure-code (Splitwise)     4.00        85  60.9%      4.9%    29.4%     61.7%     55.6%   12.0%    7.3%
+Llama-3.1-8B/H100        Azure-code (Splitwise)    16.00       326  99.4%     19.5%    70.5%     64.7%     58.5%   30.4%   30.2%
+Llama-3.1-8B/H100        Azure-code (Splitwise)    64.00       462 100.0%     99.8%   100.0%     67.3%     60.4%   44.2%   44.2%
+Llama-3.1-8B/H100        Mooncake/Kimi              1.00       177  86.9%      1.7%    20.1%     65.4%     50.8%    7.3%    6.4%
+Llama-3.1-8B/H100        Mooncake/Kimi              4.00       634  99.9%     28.6%    73.7%     66.2%     50.8%   24.4%   24.4%
+Llama-3.1-8B/H100        Mooncake/Kimi             16.00       616 100.0%     35.8%    77.0%     66.3%     51.0%   25.3%   25.3%
+Llama-3.1-8B/H100        Mooncake/Kimi             64.00       690 100.0%     34.6%    75.5%     66.2%     51.7%   25.3%   25.3%
+Llama-3.3-70B/H200       Alpaca                     0.25        14  28.1%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.3-70B/H200       Alpaca                     1.00        57  76.6%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.3-70B/H200       Alpaca                     4.00       230  99.7%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.3-70B/H200       Alpaca                    16.00       886 100.0%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.3-70B/H200       LMSYS-Chat-1M              0.25        51  71.4%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.3-70B/H200       LMSYS-Chat-1M              1.00       203  99.5%      0.0%     0.1%      1.9%      1.8%    0.1%    0.1%
+Llama-3.3-70B/H200       LMSYS-Chat-1M              4.00       820 100.0%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.3-70B/H200       LMSYS-Chat-1M             16.00      3193 100.0%      0.0%     0.1%      0.1%      0.1%    0.1%    0.1%
+Llama-3.3-70B/H200       ShareGPT                   0.25        79  85.2%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.3-70B/H200       ShareGPT                   1.00       314 100.0%      0.0%     0.3%      3.1%      3.0%    0.2%    0.2%
+Llama-3.3-70B/H200       ShareGPT                   4.00      1265 100.0%      0.1%     0.9%      1.7%      1.6%    0.4%    0.4%
+Llama-3.3-70B/H200       ShareGPT                  16.00      3821 100.0%      1.6%     8.9%      5.8%      5.7%    3.9%    3.9%
+Llama-3.3-70B/H200       Azure-conv (Splitwise)     0.25        50  73.4%      0.5%     7.8%     52.4%     50.4%    3.9%    2.9%
+Llama-3.3-70B/H200       Azure-conv (Splitwise)     1.00       199 100.0%      1.7%    23.9%     53.0%     50.4%   11.8%   11.8%
+Llama-3.3-70B/H200       Azure-conv (Splitwise)     4.00       537 100.0%     15.3%    74.8%     60.4%     58.0%   39.3%   39.3%
+Llama-3.3-70B/H200       Azure-conv (Splitwise)    16.00       536 100.0%     15.7%    75.2%     60.6%     58.1%   39.4%   39.4%
+Llama-3.3-70B/H200       Azure-code (Splitwise)     0.25         5  19.3%      3.5%    44.4%     61.4%     58.2%   22.6%    4.4%
+Llama-3.3-70B/H200       Azure-code (Splitwise)     1.00        21  65.8%      5.2%    54.4%     62.5%     58.9%   27.6%   18.1%
+Llama-3.3-70B/H200       Azure-code (Splitwise)     4.00        51  99.9%     88.2%    99.5%     67.5%     63.7%   54.3%   54.3%
+Llama-3.3-70B/H200       Azure-code (Splitwise)    16.00        51 100.0%     90.0%    99.5%     67.5%     63.5%   54.0%   54.0%
+Llama-3.3-70B/H200       Mooncake/Kimi              0.25        43  80.3%      1.7%    41.6%     65.9%     57.1%   19.7%   15.8%
+Llama-3.3-70B/H200       Mooncake/Kimi              1.00        96 100.0%     12.9%    82.9%     66.4%     57.3%   38.9%   38.9%
+Llama-3.3-70B/H200       Mooncake/Kimi              4.00        96 100.0%     16.6%    86.1%     66.3%     57.9%   41.3%   41.2%
+Llama-3.3-70B/H200       Mooncake/Kimi             16.00       110 100.0%     10.6%    79.1%     66.0%     57.4%   37.6%   37.6%
+
+-- prefix-cache sensitivity (T_FIXED=0): Mooncake 50% hit, ShareGPT 50% hit
+model/GPU                workload                  req/s  outTok/s   busy stepsMine timeMine mined/lin mined/all  R_busy  R_wall
+Llama-3.1-8B/H100        Mooncake/Kimi hit50        1.00       180  54.3%      0.8%    18.2%     62.8%     44.1%    5.8%    3.1%
+Llama-3.1-8B/H100        Mooncake/Kimi hit50        4.00       711  99.2%      3.1%    42.1%     63.4%     43.8%   12.8%   12.7%
+Llama-3.1-8B/H100        Mooncake/Kimi hit50       16.00       947 100.0%     21.5%    64.9%     64.9%     45.2%   18.7%   18.7%
+Llama-3.1-8B/H100        Mooncake/Kimi hit50       64.00      1013 100.0%     21.6%    64.5%     64.7%     45.6%   18.7%   18.7%
+Llama-3.1-8B/H100        ShareGPT hit50             1.00       334  65.8%      0.0%     0.0%      1.4%      1.3%    0.0%    0.0%
+Llama-3.1-8B/H100        ShareGPT hit50             4.00      1310  98.1%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.1-8B/H100        ShareGPT hit50            16.00      5117 100.0%      0.0%     0.0%      0.1%      0.1%    0.0%    0.0%
+Llama-3.1-8B/H100        ShareGPT hit50            64.00     20974 100.0%      0.2%     0.6%      0.6%      0.6%    0.2%    0.2%
+Llama-3.3-70B/H200       Mooncake/Kimi hit50        0.25        42  66.7%      0.8%    27.2%     63.1%     51.5%   11.4%    7.6%
+Llama-3.3-70B/H200       Mooncake/Kimi hit50        1.00       160 100.0%      7.3%    73.0%     64.8%     53.2%   31.3%   31.3%
+Llama-3.3-70B/H200       Mooncake/Kimi hit50        4.00       153 100.0%      8.0%    75.4%     65.0%     52.8%   31.9%   31.9%
+Llama-3.3-70B/H200       Mooncake/Kimi hit50       16.00       171 100.0%      6.7%    71.9%     64.4%     52.0%   30.1%   30.1%
+Llama-3.3-70B/H200       ShareGPT hit50             0.25        79  77.1%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.3-70B/H200       ShareGPT hit50             1.00       317 100.0%      0.0%     0.1%      1.5%      1.5%    0.1%    0.1%
+Llama-3.3-70B/H200       ShareGPT hit50             4.00      1276 100.0%      0.0%     0.0%      0.0%      0.0%    0.0%    0.0%
+Llama-3.3-70B/H200       ShareGPT hit50            16.00      4895 100.0%      0.0%     0.3%      0.2%      0.2%    0.2%    0.2%
+
+Sources:
+  Alpaca: input mean 19.31, output mean 58.45 -- vLLM paper (Kwon et al., SOSP'23, arXiv 2309.06180) Fig.11
+  LMSYS-Chat-1M: input mean 69.5, output mean 214.5 -- LMSYS-Chat-1M (arXiv 2309.11998) Table 1, per turn
+  ShareGPT: input mean 161.31, output mean 337.99 -- vLLM paper Fig.11
+  Azure-conv (Splitwise): input median 1020, output median 129 -- Splitwise (arXiv 2311.18677) §III, Azure 2023-11-11
+  Azure-code (Splitwise): input median 1500, output median 13 -- Splitwise §III
+  Mooncake/Kimi: input mean 8590, output mean 182 -- Mooncake (arXiv 2407.00079) §4, trace avg
