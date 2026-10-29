@@ -1,0 +1,34 @@
+A. Kernel tests
+  - absolute tolerance 0.1
+      miner/pearl-gemm/tests/test_pearl_gemm.py:704  atol = 1e-1  # absolute tolerance
+  - relative tolerance 1%
+      miner/pearl-gemm/tests/test_pearl_gemm.py:705  rtol = 1e-2  # relatve  tolerance
+  - k values exercised by the kernel tests: [128, 256, 512, 768, 1024, 4096, 8192]; largest k = 8192
+
+B. vLLM end-to-end test
+  - llama_8b.prompt: 336 UTF-8 bytes, so at most 336 tokens
+  - llama_8b.consistency_prompt: 126 UTF-8 bytes, so at most 126 tokens
+  - qwen3_moe.prompt: 249 UTF-8 bytes, so at most 249 tokens
+  - qwen3_moe.consistency_prompt: 62 UTF-8 bytes, so at most 62 tokens
+  - each generate() call sends one prompt
+      miner/vllm-miner/tests/test_vllm_execution.py:450  llm_on.generate(model_config.consistency_prompt, deterministic_params)[0].outputs[0].text
+  - generation is at most 100 tokens; decode steps then have m = 1
+      miner/vllm-miner/tests/test_vllm_execution.py:387  return SamplingParams(temperature=0.0, max_tokens=100, seed=42)
+  - longest prompt 336 bytes < plugin min_m 1024: yes -> no step of the test reaches the mining threshold
+  - reference outputs: llama_8b_consistency_mining == llama_8b_consistency_no_mining: True ('2 + 2 = 4')
+  - reference outputs: llama_8b_mining == llama_8b_no_mining: True ('Le chat est sur la table.')
+  - reference outputs: qwen3_moe_consistency_mining == qwen3_moe_consistency_no_mining: True ('2 + 2 = 4.')
+  - reference outputs: qwen3_moe_mining == qwen3_moe_no_mining: True ('Le chat est sur la table.')
+
+C. What the mining switch changes
+  - mining-layer path quantizes activations to 7 bits before choosing noisy or vanilla GEMM
+      miner/vllm-miner/src/vllm_miner/vllm_kernels.py:202  x_q, x_s, _ = quant_7bit(x, smooth_scale=smooth_scale, block_size=hadamard_block_size)
+  - the vanilla (non-mining) branch uses the same 7-bit operands
+      miner/vllm-miner/src/vllm_miner/vllm_kernels.py:218  return pearl_gemm_vanilla(
+  - with mining switched off, activations are quantized to 8 bits instead
+      miner/vllm-miner/src/vllm_miner/vllm_kernels.py:239  x_q, x_s, _ = quant_8bit(x, smooth_scale=smooth_scale, block_size=hadamard_block_size)
+
+D. Published accuracy data
+  - Llama-3.1-8B-Instruct-pearl model card (Llama-3.1-8B-Instruct-pearl.README.md): 0 mentions of accuracy or benchmarks
+
+All checks passed.

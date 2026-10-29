@@ -27,10 +27,11 @@ This repository does **not** modify Pearl. Benchmarks are small example programs
 | P02 | Useful-mining coverage is low: only steps with ≥1024 tokens mine; about 0–5% of inference compute on chat workloads / 有用挖矿覆盖率低：单步 ≥1024 个 token 才挖，对话类负载约 0–5% | Serious / 严重 | Rule confirmed by code; ratios estimated, GPU measurement pending / 规则由代码证实，比例为 CPU 仿真估算，待 GPU 实测 | [docs/problems/P02-mining-coverage.md](docs/problems/P02-mining-coverage.md) | [benchmarks/P02-mining-coverage](benchmarks/P02-mining-coverage) |
 | P03 | Useful mining earns at most 44–61% of the shares pure mining earns on the same GPU; the official useful miner runs only on H100/H200 / 有用挖矿比纯挖矿更不划算：同一张卡上份额产出最多只有纯挖矿的 44–61%，官方软件只支持 H100/H200 | Serious / 严重 | Cost structure confirmed by code; ratios from CPU simulation, GPU measurement pending / 开销结构由代码证实，比例为 CPU 仿真估算，待 GPU 实测 | [docs/problems/P03-useful-vs-pure.md](docs/problems/P03-useful-vs-pure.md) | [benchmarks/P03-useful-vs-pure](benchmarks/P03-useful-vs-pure) |
 | P04 | Miner, pool and consensus apply different rules: 11–19% of useful mining is wasted on multi-GPU setups, up to 76% on the MoE model; pool shares overvalued r/128x / 矿工、矿池、共识三方的规则不一致：多卡配置下 11–19% 的有用挖矿注定作废，MoE 模型最多 76%；矿池份额被高估 r/128 倍 | Medium / 中等 | Confirmed by local experiment / 本机实验证实 | [docs/problems/P04-rule-mismatch.md](docs/problems/P04-rule-mismatch.md) | [benchmarks/P04-rule-mismatch](benchmarks/P04-rule-mismatch) |
+| P05 | No credible check that the useful output is correct: the official "mining does not change the output" test never triggers mining; kernel tests stop at k=8192; no accuracy data for the 8B model / 有用结果的正确性没有可信验证：官方"挖矿不影响结果"的测试从未触发挖矿，内核测试只覆盖到 k=8192，8B 模型没有任何精度数据 | Medium / 中等 | Partly confirmed: denoising error is small; lack of verification confirmed by code; model-level accuracy pending GPU / 部分成立：去噪误差很小，"没有可信验证"由代码证实，模型级精度待 GPU 实测 | [docs/problems/P05-result-accuracy.md](docs/problems/P05-result-accuracy.md) | [benchmarks/P05-result-accuracy](benchmarks/P05-result-accuracy) |
 
 Summary of all problems: [docs/problem-analysis.md](docs/problem-analysis.md). More problems will be added one per commit.
 
-问题汇总分析见 [docs/problem-analysis.md](docs/problem-analysis.md)。后续问题会逐个添加，每个问题一个 commit。
+问题汇总分析见 [docs/problem-analysis.md](docs/problem-analysis.md)。共 5 个问题，每个问题一个 commit。
 
 ## Repository layout / 目录结构
 
