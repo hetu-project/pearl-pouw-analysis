@@ -1,0 +1,36 @@
+
+A. Dimension rule: the plugin mines what the verifier rejects
+  - plugin mines when k >= 1024
+      miner/vllm-miner/src/vllm_miner/config.yaml:12  min_k: 1024
+  - verifier requires k >= 16r (2048 at r = 128)
+      zk-pow/src/api/sanity_checks.rs:36  ensure!(k >= 16 * r, "k must be >= 16r || k={k} r={r}");
+  - official noise rank r = 128
+      miner/miner-base/src/miner_base/settings.py:10  noise_rank: int = 128
+  - gateway's ZK proving only checks the private witness against the public data, not the k rule
+      zk-pow/src/api/prove.rs:30  public.sanity_check_private_params(&private)?;
+  - gateway answers 'submitted' before the proof is built or checked, so the miner never sees the rejection
+      miner/pearl-gateway/src/pearl_gateway/miner_rpc/server.py:220  return self._jsonrpc_success("submitted", request_id)
+
+B. MoE rule: the node rejects MoE, the plugin still mines MoE experts
+  - mainnet dense-only fork height
+      node/chaincfg/params.go:367  DenseOnlyForkHeight: 91630,
+  - node rejects every MoE certificate once the dense-only fork is active
+      node/blockchain/validate.go:542  if cert.IsMoE() && params.IsDenseOnlyForkActive(height) {
+  - plugin decides to mine MoE expert GEMMs with the ordinary size rule, no dense-only check
+      miner/vllm-miner/src/vllm_miner/pearl_moe_experts.py:190  ) and pearl_config.should_use_noisy_gemm(num_tokens, N, K)
+
+C. Rank penalty: enforced by the node only
+  - the Rust verifier has no notion of block height, so height-dependent rules are left to the caller
+      zk-pow/src/api/sanity_checks.rs:161  /// Deciding *when* the rule applies is the caller's job: this crate has no notion of
+  - pool share check (verify_plain_proof) uses the unpenalized bound tile size x dot length
+      zk-pow/src/api/sanity_checks.rs:150  let jackpot_hash_bound = extract_difficulty_bound(nbits, &public_params.mining_config);
+  - node applies the rank penalty separately, after fork height 96,251
+      node/blockchain/validate.go:550  if err := zkpow.CheckRankPenalty(header.Bits, cert.PublicDataBytes()); err != nil {
+  - mainnet rank-penalty fork height
+      node/chaincfg/params.go:369  RankPenaltyForkHeight: 96251,
+  - official pool example validates shares with verify_plain_proof_for_cert_version only
+      py-pearl-mining/examples/v1_v2_gateway_example.py:93  ok, _ = pm.verify_plain_proof_for_cert_version(
+
+  - verify.rs never calls check_rank_penalty: yes
+
+All 14 facts found.

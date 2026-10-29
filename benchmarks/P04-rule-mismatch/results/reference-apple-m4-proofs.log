@@ -1,0 +1,26 @@
+# cmd: p04_rule_mismatch zk  (rustc 1.88.0 (6b00bc388 2025-06-23), pearl @156ef9a8, Darwin arm64, Fri Oct 30 02:01:39 CST 2026)
+Part A. Plugin threshold k >= 1024 vs verifier rule k >= 16r (r = 128)
+
+==== k=1024 r=128, GPU tile pattern h=2 w=64, m=256 n=256
+[k=1024] mine(): winning tile found in 20.354583ms
+[k=1024] check_cert_version_eligible(3) [miner and gateway pre-check]: ok (ZkV3)
+[k=1024] verify_plain_proof [pool share check]: REJECTED: k must be >= 16r || k=1024 r=128
+[k=1024] zk_prove_plain_proof [gateway, sanity_check=true]: proof produced in 6.894140666s
+[k=1024] verify_block [node consensus]: REJECTED: k must be >= 16r || k=1024 r=128
+
+==== k=2048 r=128, GPU tile pattern h=2 w=64, m=256 n=256
+[k=2048] mine(): winning tile found in 17.578084ms
+[k=2048] check_cert_version_eligible(3) [miner and gateway pre-check]: ok (ZkV3)
+[k=2048] verify_plain_proof [pool share check]: ACCEPTED
+[k=2048] zk_prove_plain_proof [gateway, sanity_check=true]: proof produced in 9.698989167s
+[k=2048] verify_block [node consensus]: ACCEPTED
+
+Part B. Pool share bound vs node rank-penalty bound (r = 256, k = 4096)
+  pool share bound / node rank-penalized bound = 2 (= r/128): a hit counted as a share is a valid block hit only half the time
+  proof 1: verify_plain_proof [pool share] ACCEPTED | verify_block [ZK] ACCEPTED | check_rank_penalty [node, after fork 96251] ok
+  proof 2: verify_plain_proof [pool share] ACCEPTED | verify_block [ZK] ACCEPTED | check_rank_penalty [node, after fork 96251] ok
+  proof 3: verify_plain_proof [pool share] ACCEPTED | verify_block [ZK] ACCEPTED | check_rank_penalty [node, after fork 96251] REJECTED (Jackpot condition not satisfied: hash does not meet the rank-penalized difficulty target)
+  proof 4: verify_plain_proof [pool share] ACCEPTED | verify_block [ZK] ACCEPTED | check_rank_penalty [node, after fork 96251] REJECTED (Jackpot condition not satisfied: hash does not meet the rank-penalized difficulty target)
+  proof 5: verify_plain_proof [pool share] ACCEPTED | verify_block [ZK] ACCEPTED | check_rank_penalty [node, after fork 96251] REJECTED (Jackpot condition not satisfied: hash does not meet the rank-penalized difficulty target)
+  proof 6: verify_plain_proof [pool share] ACCEPTED | verify_block [ZK] ACCEPTED | check_rank_penalty [node, after fork 96251] ok
+  summary: 6/6 counted as pool shares, 3/6 pass the node's rank-penalty rule

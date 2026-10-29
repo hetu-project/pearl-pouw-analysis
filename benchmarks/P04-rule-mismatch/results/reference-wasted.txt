@@ -1,0 +1,126 @@
+Plugin rule (config.yaml): mine iff m >= 1024, n >= 256, k >= 1024
+Verifier rule (sanity_checks.rs): k >= 16r = 2048 at r = 128 (MinerSettings.noise_rank)
+Dense-only rule (validate.go, mainnet height 91,630): every MoE certificate is rejected
+
+=== Llama-3.1-8B-Instruct-pearl
+  TP=1
+    qkv_proj                     x 16  n=  6144 k=  4096  not 7-bit, not mined
+    o_proj                       x 32  n=  4096 k=  4096  mined, valid
+    gate_up_proj                 x 32  n= 28672 k=  4096  mined, valid
+    down_proj                    x 32  n=  4096 k= 14336  not 7-bit, not mined
+    qkv_proj                     x 16  n=  6144 k=  4096  mined, valid
+  TP=2
+    qkv_proj                     x 16  n=  3072 k=  4096  not 7-bit, not mined
+    o_proj                       x 32  n=  4096 k=  2048  mined, valid
+    gate_up_proj                 x 32  n= 14336 k=  4096  mined, valid
+    down_proj                    x 32  n=  4096 k=  7168  not 7-bit, not mined
+    qkv_proj                     x 16  n=  3072 k=  4096  mined, valid
+  TP=4
+    qkv_proj                     x 16  n=  1536 k=  4096  not 7-bit, not mined
+    o_proj                       x 32  n=  4096 k=  1024  MINED, REJECTED (k=1024 < 2048)
+    gate_up_proj                 x 32  n=  7168 k=  4096  mined, valid
+    down_proj                    x 32  n=  4096 k=  3584  not 7-bit, not mined
+    qkv_proj                     x 16  n=  1536 k=  4096  mined, valid
+  TP=8
+    qkv_proj                     x 16  n=   768 k=  4096  not 7-bit, not mined
+    o_proj                       x 32  n=  4096 k=   512  below plugin threshold, not mined
+    gate_up_proj                 x 32  n=  3584 k=  4096  mined, valid
+    down_proj                    x 32  n=  4096 k=  1792  not 7-bit, not mined
+    qkv_proj                     x 16  n=   768 k=  4096  mined, valid
+
+=== Llama-3.3-70B-Instruct-pearl
+  TP=1
+    qkv_proj                     x 40  n= 10240 k=  8192  not 7-bit, not mined
+    o_proj                       x 80  n=  8192 k=  8192  mined, valid
+    gate_up_proj                 x 80  n= 57344 k=  8192  mined, valid
+    down_proj                    x 80  n=  8192 k= 28672  not 7-bit, not mined
+    qkv_proj                     x 40  n= 10240 k=  8192  mined, valid
+  TP=2
+    qkv_proj                     x 40  n=  5120 k=  8192  not 7-bit, not mined
+    o_proj                       x 80  n=  8192 k=  4096  mined, valid
+    gate_up_proj                 x 80  n= 28672 k=  8192  mined, valid
+    down_proj                    x 80  n=  8192 k= 14336  not 7-bit, not mined
+    qkv_proj                     x 40  n=  5120 k=  8192  mined, valid
+  TP=4
+    qkv_proj                     x 40  n=  2560 k=  8192  not 7-bit, not mined
+    o_proj                       x 80  n=  8192 k=  2048  mined, valid
+    gate_up_proj                 x 80  n= 14336 k=  8192  mined, valid
+    down_proj                    x 80  n=  8192 k=  7168  not 7-bit, not mined
+    qkv_proj                     x 40  n=  2560 k=  8192  mined, valid
+  TP=8
+    qkv_proj                     x 40  n=  1280 k=  8192  not 7-bit, not mined
+    o_proj                       x 80  n=  8192 k=  1024  MINED, REJECTED (k=1024 < 2048)
+    gate_up_proj                 x 80  n=  7168 k=  8192  mined, valid
+    down_proj                    x 80  n=  8192 k=  3584  not 7-bit, not mined
+    qkv_proj                     x 40  n=  1280 k=  8192  mined, valid
+
+=== Gemma-4-31B-it-pearl
+  TP=1
+    qkv_proj[sliding]            x 50  n= 16384 k=  5376  not 7-bit, not mined
+    o_proj[sliding]              x 50  n=  5376 k=  8192  mined, valid
+    gate_up_proj                 x 60  n= 43008 k=  5376  mined, valid
+    down_proj                    x 60  n=  5376 k= 21504  not 7-bit, not mined
+    qkv_proj[full]               x 10  n= 20480 k=  5376  not 7-bit, not mined
+    o_proj[full]                 x 10  n=  5376 k= 16384  mined, valid
+  TP=2
+    qkv_proj[sliding]            x 50  n=  8192 k=  5376  not 7-bit, not mined
+    o_proj[sliding]              x 50  n=  5376 k=  4096  mined, valid
+    gate_up_proj                 x 60  n= 21504 k=  5376  mined, valid
+    down_proj                    x 60  n=  5376 k= 10752  not 7-bit, not mined
+    qkv_proj[full]               x 10  n= 10240 k=  5376  not 7-bit, not mined
+    o_proj[full]                 x 10  n=  5376 k=  8192  mined, valid
+  TP=4
+    qkv_proj[sliding]            x 50  n=  4096 k=  5376  not 7-bit, not mined
+    o_proj[sliding]              x 50  n=  5376 k=  2048  mined, valid
+    gate_up_proj                 x 60  n= 10752 k=  5376  mined, valid
+    down_proj                    x 60  n=  5376 k=  5376  not 7-bit, not mined
+    qkv_proj[full]               x 10  n=  5120 k=  5376  not 7-bit, not mined
+    o_proj[full]                 x 10  n=  5376 k=  4096  mined, valid
+  TP=8
+    qkv_proj[sliding]            x 50  n=  2048 k=  5376  not 7-bit, not mined
+    o_proj[sliding]              x 50  n=  5376 k=  1024  MINED, REJECTED (k=1024 < 2048)
+    gate_up_proj                 x 60  n=  5376 k=  5376  mined, valid
+    down_proj                    x 60  n=  5376 k=  2688  not 7-bit, not mined
+    qkv_proj[full]               x 10  n=  2560 k=  5376  not 7-bit, not mined
+    o_proj[full]                 x 10  n=  5376 k=  2048  mined, valid
+
+=== Qwen3-30B-A3B-Instruct-2507-pearl
+  TP=1
+    qkv_proj                     x 48  n=  5120 k=  2048  mined, valid
+    o_proj                       x 48  n=  2048 k=  4096  mined, valid
+    experts.gate_up (x8 active)  x 48  n=  1536 k=  2048  MINED, REJECTED (MoE, dense-only)
+    experts.down (x8 active)     x 48  n=  2048 k=   768  not 7-bit, not mined
+  TP=2
+    qkv_proj                     x 48  n=  2560 k=  2048  mined, valid
+    o_proj                       x 48  n=  2048 k=  2048  mined, valid
+    experts.gate_up (x8 active)  x 48  n=   768 k=  2048  MINED, REJECTED (MoE, dense-only)
+    experts.down (x8 active)     x 48  n=  1024 k=   768  not 7-bit, not mined
+  TP=4
+    qkv_proj                     x 48  n=  1280 k=  2048  mined, valid
+    o_proj                       x 48  n=  2048 k=  1024  MINED, REJECTED (k=1024 < 2048)
+    experts.gate_up (x8 active)  x 48  n=   384 k=  2048  MINED, REJECTED (MoE, dense-only)
+    experts.down (x8 active)     x 48  n=   512 k=   768  not 7-bit, not mined
+  TP=8
+    qkv_proj                     x 48  n=   640 k=  2048  mined, valid
+    o_proj                       x 48  n=  2048 k=   512  below plugin threshold, not mined
+    experts.gate_up (x8 active)  x 48  n=   192 k=  2048  below plugin threshold, not mined
+    experts.down (x8 active)     x 48  n=   256 k=   768  not 7-bit, not mined
+
+Share of the plugin's mining work (= share of its expected wins) that can never become a valid block
+  checkpoint                            TP    k < 2048   + MoE rejected
+  Llama-3.1-8B-Instruct-pearl            1        0.0%             0.0%
+  Llama-3.1-8B-Instruct-pearl            2        0.0%             0.0%
+  Llama-3.1-8B-Instruct-pearl            4       11.4%            11.4%
+  Llama-3.1-8B-Instruct-pearl            8        0.0%             0.0%
+  Llama-3.3-70B-Instruct-pearl           1        0.0%             0.0%
+  Llama-3.3-70B-Instruct-pearl           2        0.0%             0.0%
+  Llama-3.3-70B-Instruct-pearl           4        0.0%             0.0%
+  Llama-3.3-70B-Instruct-pearl           8       11.6%            11.6%
+  Gemma-4-31B-it-pearl                   1        0.0%             0.0%
+  Gemma-4-31B-it-pearl                   2        0.0%             0.0%
+  Gemma-4-31B-it-pearl                   4        0.0%             0.0%
+  Gemma-4-31B-it-pearl                   8       13.0%            13.0%
+  Qwen3-30B-A3B-Instruct-2507-pearl      1        0.0%            57.1%
+  Qwen3-30B-A3B-Instruct-2507-pearl      2        0.0%            57.1%
+  Qwen3-30B-A3B-Instruct-2507-pearl      4       19.0%            76.2%
+  Qwen3-30B-A3B-Instruct-2507-pearl      8        0.0%             0.0%
