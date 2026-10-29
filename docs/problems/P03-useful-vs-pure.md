@@ -168,7 +168,7 @@ Basu 论文 Table 5（2026 年 5 月，纯挖矿，按租用价）给出每美�
 - **不是计量能力的限制**：Pearl 从不计量 AI 推理用了多少算力，链上只看刮了多少张彩票。
 - **挖矿内核只有 Hopper 版本**：边推理边挖矿，需要在推理的矩阵乘法里同时加噪声、做乘法、切块算彩票、去噪声，这些由 Pearl 自己写的计算库 `pearl-gemm` 完成。它只编译了 Hopper 架构（`miner/pearl-gemm/setup.py:89`：`sm_90a`），用了 Hopper 专有的 TMA 数据搬运指令（`csrc/gemm/collective_mainloop.hpp:54`）；插件也要求计算能力 ≥ 9（`miner/vllm-miner/src/vllm_miner/vllm_scheme.py:60`）。
 - **还必须用 Pearl 发布的专用模型**：插件只在 7 位量化的层上挖矿（`vllm_config.py:67-84`），普通开源模型没有这种层。
-- **协议本身不限硬件**：第三方纯挖矿软件（KRig、SRBMiner-MULTI、BzMiner、PeakMiner 等，见 [`docs/notes/07-miner-software.md`](../notes/07-miner-software.md) §8）支持主流消费级显卡。据 Basu 论文的字符串分析，主流挖矿软件中没有推理代码；这些软件大多不开源，我们没有自行验证。
+- **协议本身不限硬件**：第三方纯挖矿软件支持主流消费级显卡，例如 Kryptex 矿池自研的 KRig（[Kryptex PRL 页面](https://pool.kryptex.com/prl)），以及 SRBMiner-MULTI、PeakMiner、ForgeMiner、ARCMiner（[Kryptex 挖矿教程](https://pool.kryptex.com/articles/how-to-mine-pearl-en)，整理见 [`docs/notes/07-miner-software.md`](../notes/07-miner-software.md) §8）。据 Basu 论文的字符串分析，主流挖矿软件中没有推理代码；这些软件大多不开源，我们没有自行验证。
 - **为什么只做 Hopper**：官方没有说明。我们推断是为了把加噪声、算彩票和乘法融合在一起，把额外开销压到最低，必须用最新的专有指令；而每一代显卡单独写一套高性能内核工作量很大，官方先只做了 AI 推理最主流的 H100/H200。
 
 结果是：
