@@ -9,9 +9,9 @@ Checks, all against the Pearl source and the pinned 8B model card:
      alone, and its UTF-8 length bounds its token count (a byte-level BPE token is at least one
      byte). If every prompt is shorter than the plugin's min_m, no forward step reaches the mining
      threshold, so the "mining" runs never execute a noisy GEMM;
-  C. with mining switched on, activations of mining layers are quantized to 7 bits whether or not
-     a step mines; with mining switched off they are quantized to 8 bits. The end-to-end test's
-     "mining" vs "no mining" comparison is therefore 7-bit vanilla GEMM vs 8-bit vanilla GEMM;
+  C. what the test's mining switch changes: MINER_NO_MINING only chooses noisy or vanilla GEMM on
+     the 7-bit layers; which layers are 7-bit is fixed by the checkpoint. The switch is therefore
+     the right variable to compare, but only steps that reach the threshold ever take the noisy path;
   D. the 8B model card publishes no accuracy numbers.
 
 Usage: p05_code_facts.py <pearl_dir> <llama-8b-model-card.md>
@@ -82,13 +82,12 @@ def main():
         twin = key[: -len("_mining")] + "_no_mining"
         print(f"  - reference outputs: {key} == {twin}: {refs[key] == refs.get(twin)} ({refs[key]!r})")
 
-    print("\nC. What the mining switch changes")
-    fact("mining-layer path quantizes activations to 7 bits before choosing noisy or vanilla GEMM",
-         "miner/vllm-miner/src/vllm_miner/vllm_kernels.py", r"x_q, x_s, _ = quant_7bit\(")
-    fact("the vanilla (non-mining) branch uses the same 7-bit operands",
-         "miner/vllm-miner/src/vllm_miner/vllm_kernels.py", r"return pearl_gemm_vanilla\(")
-    fact("with mining switched off, activations are quantized to 8 bits instead",
-         "miner/vllm-miner/src/vllm_miner/vllm_kernels.py", r"x_q, x_s, _ = quant_8bit\(")
+    print("\nC. What the test's mining switch changes")
+    fact("the test toggles MINER_NO_MINING between the two runs", E2E_TEST, r'os\.environ\["MINER_NO_MINING"\]')
+    fact("the switch only selects noisy vs vanilla GEMM on 7-bit layers, and only at or above the size threshold",
+         "miner/vllm-miner/src/vllm_miner/vllm_kernels.py", r"if config\.should_use_noisy_gemm\(m, n, k\) and not config\.settings\.no_mining:")
+    fact("which layers are 7-bit (mineable) is decided by the checkpoint, not by the switch",
+         "miner/vllm-miner/src/vllm_miner/vllm_config.py", r"if self\._is_mining_layer\(weight_quant, input_quant\):")
 
     print("\nD. Published accuracy data")
     text = card.read_text()

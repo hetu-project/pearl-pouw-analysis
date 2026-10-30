@@ -20,13 +20,13 @@ B. vLLM end-to-end test
   - reference outputs: qwen3_moe_consistency_mining == qwen3_moe_consistency_no_mining: True ('2 + 2 = 4.')
   - reference outputs: qwen3_moe_mining == qwen3_moe_no_mining: True ('Le chat est sur la table.')
 
-C. What the mining switch changes
-  - mining-layer path quantizes activations to 7 bits before choosing noisy or vanilla GEMM
-      miner/vllm-miner/src/vllm_miner/vllm_kernels.py:202  x_q, x_s, _ = quant_7bit(x, smooth_scale=smooth_scale, block_size=hadamard_block_size)
-  - the vanilla (non-mining) branch uses the same 7-bit operands
-      miner/vllm-miner/src/vllm_miner/vllm_kernels.py:218  return pearl_gemm_vanilla(
-  - with mining switched off, activations are quantized to 8 bits instead
-      miner/vllm-miner/src/vllm_miner/vllm_kernels.py:239  x_q, x_s, _ = quant_8bit(x, smooth_scale=smooth_scale, block_size=hadamard_block_size)
+C. What the test's mining switch changes
+  - the test toggles MINER_NO_MINING between the two runs
+      miner/vllm-miner/tests/test_vllm_execution.py:186  os.environ["MINER_NO_MINING"] = "true" if no_mining else "false"
+  - the switch only selects noisy vs vanilla GEMM on 7-bit layers, and only at or above the size threshold
+      miner/vllm-miner/src/vllm_miner/vllm_kernels.py:207  if config.should_use_noisy_gemm(m, n, k) and not config.settings.no_mining:
+  - which layers are 7-bit (mineable) is decided by the checkpoint, not by the switch
+      miner/vllm-miner/src/vllm_miner/vllm_config.py:186  if self._is_mining_layer(weight_quant, input_quant):
 
 D. Published accuracy data
   - Llama-3.1-8B-Instruct-pearl model card (Llama-3.1-8B-Instruct-pearl.README.md): 0 mentions of accuracy or benchmarks
