@@ -4,6 +4,8 @@
 
 ![H100 实测汇总](../../docs/images/GPU-measurement.png)
 
+面向读者的完整报告（测什么、每一步怎么做、准确率怎么算）：[`docs/gpu-test-report.md`](../../docs/gpu-test-report.md)。本文件侧重脚本和原始数据。
+
 | 环境 | |
 |---|---|
 | GPU | 1 × NVIDIA H100 NVL（94 GB），驱动 595.91.07，CUDA 13.2（vast.ai 租用，2026-11-08） |

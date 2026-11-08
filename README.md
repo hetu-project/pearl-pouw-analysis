@@ -31,13 +31,14 @@ This repository does **not** modify Pearl. Benchmarks are small example programs
 
 Summary of all problems: [docs/problem-analysis.md](docs/problem-analysis.md). GPU measurements on one H100 (accuracy, latency, mining overhead, coverage, useful vs pure mining): [benchmarks/GPU-mining-impact](benchmarks/GPU-mining-impact).
 
-问题汇总分析见 [docs/problem-analysis.md](docs/problem-analysis.md)。共 5 个问题。H100 实测（准确率、延迟、挖矿开销、覆盖率、有用挖矿 vs 纯挖矿）见 [benchmarks/GPU-mining-impact](benchmarks/GPU-mining-impact)。
+问题汇总分析见 [docs/problem-analysis.md](docs/problem-analysis.md)。共 5 个问题。H100 实测报告（测什么、怎么测、准确率怎么算、结果和官方说法对比）见 [docs/gpu-test-report.md](docs/gpu-test-report.md)，脚本和原始数据在 [benchmarks/GPU-mining-impact](benchmarks/GPU-mining-impact)。
 
 ## Repository layout / 目录结构
 
 ```
 docs/
   problem-analysis.md   问题汇总分析（从这里开始读）
+  gpu-test-report.md    H100 实测报告
   methodology.md        研究方法、问题条目格式、严重程度定义
   pearl-algorithm.md    Pearl 挖矿与验证算法（伪代码 + 参数说明）
   notes/                源码级研究笔记（按组件）

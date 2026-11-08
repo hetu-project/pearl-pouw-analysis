@@ -26,7 +26,7 @@
 
 ![P05 有用结果的正确性没有可信验证](images/P05-result-accuracy.png)
 
-**H100 实测汇总**：结果没变，但服务慢了一倍，真实对话几乎不挖矿，挖矿收益远不如只挖矿；以及和 Pearl 官方说法的逐条对比。详见 [`benchmarks/GPU-mining-impact`](../benchmarks/GPU-mining-impact)。
+**H100 实测汇总**：结果没变，但服务慢了一倍，真实对话几乎不挖矿，挖矿收益远不如只挖矿；以及和 Pearl 官方说法的逐条对比。完整的测试步骤和准确率计算方法见 [H100 实测报告](gpu-test-report.md)。
 
 ![H100 实测汇总](images/GPU-measurement.png)
 
