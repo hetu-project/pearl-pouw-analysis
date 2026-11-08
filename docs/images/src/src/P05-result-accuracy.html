@@ -1,0 +1,97 @@
+<div class="wrap">
+  <header>
+    <div>
+      <div class="kicker">PEARL 有用挖矿 · 问题 5 / 5</div>
+      <h1>官方测试没真挖矿；我们补测：结果不变</h1>
+      <p class="sub">官方用"开、关挖矿各生成一次，比较结果"来证明挖矿不影响结果。思路是对的，但测试提示太短，两次都没有真正挖矿。我们在 H100 上按正确方法补测了。</p>
+    </div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--navy)"></i>官方测试的流程</span>
+      <span><i class="sw" style="background:var(--bad)"></i>出问题的地方</span>
+      <span><i class="sw" style="background:var(--ours)"></i>我们的测法和结果</span>
+    </div>
+  </header>
+
+  <section class="panel">
+    <h2>官方测试是怎么做的 <small>test_vllm_execution.py 中的 test_consistency</small></h2>
+    <div class="steps">
+      <div class="step">
+        <div class="n"><i>01</i>准备一条提示</div>
+        <p>例如"What is 2+2?"，最长的一条也只有 336 个 token。</p>
+      </div>
+      <div class="arrow"></div>
+      <div class="step">
+        <div class="n"><i>02</i>打开挖矿，生成一次</div>
+        <p>每次只发这一条，生成回答时每步只有 1 个 token。</p>
+      </div>
+      <div class="arrow"></div>
+      <div class="step">
+        <div class="n"><i>03</i>关闭挖矿，再生成一次</div>
+        <p>开关只改"走挖矿乘法还是普通乘法"，其他都不变。这一点设计得对。</p>
+      </div>
+      <div class="arrow"></div>
+      <div class="step fault">
+        <span class="flag">两次都没挖</span>
+        <div class="n"><i>04</i>比较两次的文本</div>
+        <p>都是"2 + 2 = 4"，测试通过。但没有一步达到 1024 个 token 的挖矿门槛，<b class="no">两次跑的是同样的代码</b>。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="abc">
+    <article class="card a">
+      <h3><i>A</i>数据对不上的地方</h3>
+      <svg viewBox="0 0 420 92" width="100%" role="img" aria-label="测试提示最长 336 个 token，挖矿门槛 1024 个 token">
+        <text x="0" y="16" font-size="13" fill="var(--muted)">测试中最大的一步 vs 挖矿门槛（token 数）</text>
+        <rect x="0" y="28" width="134" height="22" rx="4" fill="var(--bad)"/>
+        <text x="142" y="44" font-size="14" font-weight="700" fill="var(--bad)">≤ 336：测试提示</text>
+        <rect x="0" y="60" width="410" height="22" rx="4" fill="var(--soft)" stroke="var(--line)"/>
+        <text x="402" y="76" text-anchor="end" font-size="14" font-weight="700" fill="var(--navy)">1024：挖矿门槛</text>
+      </svg>
+      <ul style="margin-top:8px">
+        <li><b>没挖矿</b>：测试里也没有检查挖矿乘法有没有被调用过，所以一直没被发现。</li>
+        <li><b>只比短答案</b>："2 + 2 = 4"这种几个 token 的回答，就算真挖了也说明不了多少。</li>
+        <li><b>其他数据补不上</b>：计算库单元测试只测到 k = 8192；模型卡评测没说是否开着挖矿；8B 模型没有任何精度数据。</li>
+      </ul>
+      <p class="hint">由代码证实：从 Pearl 源码和固定版本的模型卡中直接读出</p>
+    </article>
+
+    <article class="card b">
+      <h3><i>B</i>正确的验证方法</h3>
+      <p class="lead">思路不变，开、关挖矿各跑一次，但要做到三点：</p>
+      <ul>
+        <li><b>保证真的挖了</b>：一次提交大量请求，让每一步都 ≥ 1024 个 token；统计挖矿乘法的调用次数，开挖矿时必须大于 0，关挖矿时必须为 0。</li>
+        <li><b>用评测集比准确率</b>：GSM8K 全部 1319 道题，比较两次的准确率和每道题的答案。</li>
+        <li><b>记录条件</b>：模型、显卡、并发数、挖矿调用次数，让别人能重跑。</li>
+      </ul>
+    </article>
+
+    <article class="card c">
+      <h3><i>C</i>我们的实测结果</h3>
+      <p class="lead">1 张 H100、官方插件和官方 8B 模型，按左边的方法跑：</p>
+      <div class="bars" style="grid-template-columns: 100px 1fr">
+        <span>关挖矿</span><div class="bar"><b style="width:68%;background:var(--navy)"></b><span>84.31%</span></div>
+        <span>开挖矿</span><div class="bar"><b style="width:68%;background:var(--ours)"></b><span class="yes">84.31%</span></div>
+      </div>
+      <p class="cap" style="margin-top:4px">GSM8K 1319 题准确率</p>
+      <ul>
+        <li>生成文本 <b class="yes">100% 逐字一致</b>；开挖矿时挖矿乘法被调用 13,840 次，确认真挖了。</li>
+        <li>单个矩阵乘法：挖矿版和普通版的输出逐位相同。</li>
+        <li><b>对 PoCW</b>：结果对不对要由协议验收；"做有用功不影响结果"要在证明真正执行的条件下测。</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="numbers" style="grid-template-columns: 1fr 60px 1fr 1fr 1.2fr">
+    <div class="t">官方测试 vs 我们的实测</div>
+    <div class="stat bad"><span class="lab">官方测试中真正挖矿的步数</span><span class="val">0</span><span class="cap2">最长提示 336 个 token，门槛 1024</span></div>
+    <div class="op">→</div>
+    <div class="stat good"><span class="lab">我们实测的挖矿调用</span><span class="val">13,840 次</span><span class="cap2">GSM8K 1319 题一次提交</span></div>
+    <div class="stat good"><span class="lab">开、关挖矿输出一致</span><span class="val">100%</span><span class="cap2">准确率都是 84.31%</span></div>
+    <div class="foot">
+      <div>依据：Pearl 开源代码（版本 156ef9a8）中的测试文件和固定版本的模型卡</div>
+      <div>实测：1 × H100 NVL，Llama-3.1-8B-Instruct-pearl，2026-11-08；只连本地模拟网关，不提交区块；70B 未测</div>
+      <div>复现脚本见 github.com/hetu-project/pearl-pouw-analysis</div>
+    </div>
+  </section>
+</div>

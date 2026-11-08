@@ -1,0 +1,115 @@
+<div class="wrap">
+  <header>
+    <div>
+      <div class="kicker">PEARL 有用挖矿 · 问题 2 / 5</div>
+      <h1>真做 AI 服务时，大部分计算挖不了矿</h1>
+      <p class="sub">一步不到 1024 个 token 就不挖。聊天时 AI 逐字生成回答，每步只有几十个 token，几乎所有计算都进不了挖矿。</p>
+    </div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--navy)"></i>Pearl 现在的流程</span>
+      <span><i class="sw" style="background:var(--bad)"></i>出问题的地方</span>
+      <span><i class="sw" style="background:var(--ours)"></i>我们学到的</span>
+    </div>
+  </header>
+
+  <section class="panel">
+    <h2>一次 AI 聊天里，Pearl 怎么"顺便挖矿" <small>用 Pearl 官方的 vLLM 挖矿插件</small></h2>
+    <div class="steps">
+      <div class="step">
+        <div class="n"><i>01</i>用户发来问题</div>
+        <svg viewBox="0 0 300 96" width="100%" height="96">
+          <rect x="60" y="10" width="180" height="56" rx="14" fill="var(--soft)" stroke="var(--navy)" stroke-width="3"/>
+          <path d="M92 64 L80 90 L118 66" fill="var(--soft)" stroke="var(--navy)" stroke-width="3" stroke-linejoin="round"/>
+          <rect x="84" y="28" width="132" height="7" rx="3.5" fill="#5b6b7c"/><rect x="84" y="44" width="86" height="7" rx="3.5" fill="#5b6b7c"/>
+        </svg>
+        <p>很多用户的请求会被拼在同一步里一起算。</p>
+      </div>
+      <div class="arrow"></div>
+      <div class="step">
+        <div class="n"><i>02</i>AI 一口气读完问题</div>
+        <svg viewBox="0 0 300 96" width="100%" height="96">
+          <rect x="30" y="26" width="240" height="48" rx="8" fill="#d8e0ea" stroke="var(--navy)" stroke-width="3"/>
+          <text x="150" y="57" text-anchor="middle" font-size="17" font-weight="700" fill="var(--navy)">一步处理一大批 token</text>
+        </svg>
+        <p>一步就要处理成百上千个 token，量够大，<b class="yes">有机会挖矿</b>。</p>
+      </div>
+      <div class="arrow"></div>
+      <div class="step">
+        <div class="n"><i>03</i>AI 逐字写回答</div>
+        <svg viewBox="0 0 300 96" width="100%" height="96">
+          <g fill="var(--navy)"><rect x="34" y="36" width="24" height="24" rx="4"/><rect x="66" y="36" width="24" height="24" rx="4"/><rect x="98" y="36" width="24" height="24" rx="4"/><rect x="130" y="36" width="24" height="24" rx="4"/></g>
+          <rect x="162" y="36" width="24" height="24" rx="4" fill="#9aaabb"/>
+          <text x="200" y="55" font-size="17" font-weight="700" fill="var(--navy)">…几百步</text>
+        </svg>
+        <p>每步每个用户只出 1 个 token，10 个人在聊，这一步就只有 10 个。<b>回答越长，这类步骤越多。</b></p>
+      </div>
+      <div class="arrow"></div>
+      <div class="step fault">
+        <span class="flag">卡在这里</span>
+        <div class="n"><i>04</i>每一步都要过门槛</div>
+        <svg viewBox="0 0 300 96" width="100%" height="96">
+          <line x1="20" y1="26" x2="290" y2="26" stroke="var(--bad)" stroke-width="2.5" stroke-dasharray="7 6"/>
+          <text x="104" y="19" font-size="14" font-weight="700" fill="var(--bad)">门槛：一步 ≥ 1024 个 token</text>
+          <rect x="40" y="14" width="48" height="78" rx="4" fill="var(--ours)"/>
+          <text x="64" y="84" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">读题</text>
+          <text x="196" y="58" text-anchor="middle" font-size="14" font-weight="700" fill="var(--bad)">写回答：全都不够</text>
+          <g fill="var(--navy)" opacity=".75"><rect x="120" y="80" width="22" height="9" rx="2"/><rect x="150" y="80" width="22" height="9" rx="2"/><rect x="180" y="80" width="22" height="9" rx="2"/><rect x="210" y="80" width="22" height="9" rx="2"/><rect x="240" y="80" width="22" height="9" rx="2"/></g>
+        </svg>
+        <p>够 1024 个 token 才挖，不够就<b class="no">完全不挖</b>。聊天时绝大多数步骤都达不到。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="abc">
+    <article class="card a">
+      <h3><i>A</i>门槛为什么是 1024？</h3>
+      <p class="lead">挖矿的额外开销是固定的，任务越小，占比越大。按理论估算，m = 1024 时约 25%；H100 实测远高于此。</p>
+      <p class="cap">单次挖矿乘法比普通乘法多花的时间（8B 最大的层 gate_up_proj）</p>
+      <div class="bars">
+        <span>m = 1024</span><div class="bar"><b style="width:2.9%;background:var(--warn)"></b><span>理论 25%</span><b style="width:50%;background:var(--bad);margin-left:6px"></b><span class="no">实测 +435%</span></div>
+        <span>m = 4096</span><div class="bar"><b style="width:0.7%;background:var(--warn)"></b><span>理论 6%</span><b style="width:16.3%;background:var(--bad);margin-left:6px"></b><span class="no">实测 +142%</span></div>
+        <span>m = 8192</span><div class="bar"><b style="width:0.4%;background:var(--warn)"></b><span>理论 3%</span><b style="width:10%;background:var(--bad);margin-left:6px"></b><span class="no">实测 +87%</span></div>
+      </div>
+      <p class="hint">m 是这一步的 token 数。理论值只算了给权重加噪声（2×128÷m）；实测还包括每次复制整份权重、算 Merkle 哈希和 CPU 端准备，小的层在 m = 1024 时慢到 13–19 倍。为什么正好是 1024，官方没有说明。</p>
+    </article>
+
+    <article class="card b">
+      <h3><i>B</i>Pearl 为什么这么设计？</h3>
+      <div class="tags"><span class="tag on">算法原理决定</span><span class="tag off">人不够</span><span class="tag on">技术不支持</span><span class="tag">工程实现问题</span></div>
+      <ul>
+        <li><b>防偷工带来固定开销</b>：噪声要在交出数据哈希之后才定。用户输入每一步都变，所以每一步都要对整份模型权重重新哈希、重新加噪声，这笔开销和这一步多大无关。</li>
+        <li><b>和推理加速冲突</b>：挖矿每一步都要在主机上取任务、提交结果，没法放进 vLLM 加速逐字生成用的 CUDA Graph。官方让整个服务关掉这项加速，实测每个 token 慢一倍。</li>
+        <li><b>证明只支持 7 位整数乘法</b>：约三分之一的计算格式不对，天生挖不了。</li>
+      </ul>
+    </article>
+
+    <article class="card c">
+      <h3><i>C</i>对我们 PoCW 的启发</h3>
+      <div class="chips">
+        <div class="chip"><b>按任务</b>摊薄开销</div>
+        <div class="chip"><b>覆盖</b>逐字生成</div>
+        <div class="chip"><b>不看</b>批大小</div>
+        <div class="chip"><b>不碍</b>推理加速</div>
+        <div class="chip dark"><b>不设</b>断崖门槛</div>
+      </div>
+      <ul>
+        <li>证明开销不能是"每一步的固定开销"，应该按任务摊薄。</li>
+        <li>逐字生成、小批量、低负载时完成的有用工作，同样要能获得奖励。</li>
+        <li>证明过程不能要求推理牺牲常规的加速手段。</li>
+        <li>不能有"1023 不挖、1024 才挖"这种断崖，否则会诱导矿工凑批。</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="numbers" style="grid-template-columns: 1fr 150px 1fr 1.25fr">
+    <div class="t">不同 AI 场景里，实际参与挖矿的计算占比</div>
+    <div class="stat bad"><span class="lab">聊天类（最常见）</span><span class="val">0–3.2%</span><span class="cap2">H100 实测：ShareGPT 真实对话，每秒 1–16 个请求</span></div>
+    <div class="op" style="font-size:17px;color:var(--ours)">我们的方向<br><span style="font-size:34px">⟶</span></div>
+    <div class="stat good"><span class="lab">PoCW 计入工作量的部分</span><span class="val">整个任务</span><span class="cap2">按完成的任务计，聊天也算</span></div>
+    <div class="foot">
+      <div>长文档（输入 2000 token）实测约 65%，接近能挖的上限 67%</div>
+      <div>"1024 门槛"和"最多约 67% 的层能挖"由代码证实；电脑仿真估算对话类 0–5%，与实测一致</div>
+      <div>实测：1 × H100 NVL，8B 模型，2026-11-08；70B 未实测。复现脚本见 github.com/hetu-project/pearl-pouw-analysis</div>
+    </div>
+  </section>
+</div>

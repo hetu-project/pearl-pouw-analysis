@@ -1,0 +1,91 @@
+<style>
+.rows { display: grid; grid-template-columns: 190px repeat(4, 1fr); gap: 12px; }
+.rows .who { border-radius: 12px; padding: 14px 14px; display: flex; flex-direction: column; justify-content: center; }
+.rows .who b { font-size: 19px; font-weight: 900; } .rows .who span { font-size: 14px; margin-top: 4px; }
+.rows .cell { border: 1.5px solid; border-radius: 12px; padding: 12px 14px; font-size: 15px; line-height: 1.5; }
+.rows .cell b { display: block; font-size: 16.5px; margin-bottom: 2px; }
+.rows .useful { border-color: var(--bad); background: var(--bad-soft); }
+.rows .pure { border-color: var(--navy); background: #fff; }
+</style>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="kicker">PEARL 有用挖矿 · 问题 3 / 5</div>
+      <h1>不做 AI、只挖矿，反而更赚钱</h1>
+      <p class="sub">想边做 AI 推理边挖矿，门槛很高；只挖矿，门槛很低。H100 实测：做了推理，同一张卡的挖矿收益最好不到一半，在线服务时只有几个百分点。</p>
+    </div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--navy)"></i>只挖矿的做法</span>
+      <span><i class="sw" style="background:var(--bad)"></i>做 AI 服务的额外负担</span>
+      <span><i class="sw" style="background:var(--ours)"></i>我们学到的</span>
+    </div>
+  </header>
+
+  <section class="panel">
+    <h2>同样一张卡，两种矿工在做什么 <small>规则对两者完全一样，奖励也一样</small></h2>
+    <div class="rows">
+      <div class="who" style="background:var(--bad-soft);color:var(--bad)"><b>边推理边挖矿</b><span>Pearl 宣传的"有用挖矿"</span></div>
+      <div class="cell useful"><b>01 门槛：三个条件缺一不可</b>H100/H200 + 官方 vLLM 插件 + Pearl 专用量化模型</div>
+      <div class="cell useful"><b>02 每一步重新加噪声</b>每一步都要给整份模型权重重新哈希、加噪声</div>
+      <div class="cell useful"><b>03 结果要还原</b>去掉噪声，把干净的答案交给用户</div>
+      <div class="cell useful"><b>04 不是每步都挖</b>不到 1024 个 token 不挖，只有约 67% 的层能挖；没有请求时 GPU 空着</div>
+      <div class="who" style="background:var(--soft);color:var(--navy)"><b>只挖矿</b><span>不服务任何用户</span></div>
+      <div class="cell pure"><b>01 门槛：装一个挖矿软件</b>主流游戏卡装 KRig 等第三方软件就能挖</div>
+      <div class="cell pure"><b>02 同一份数据反复用</b>每个区块只加一次噪声，之后一直复用</div>
+      <div class="cell pure"><b>03 结果不用还原</b>算完只看彩票，不交付给谁</div>
+      <div class="cell pure"><b>04 100% 计算都刮彩票</b>矩阵想多大就多大，GPU 一刻不停</div>
+    </div>
+  </section>
+
+  <section class="abc">
+    <article class="card a">
+      <h3><i>A</i>差多少？</h3>
+      <p class="lead">H100 实测：边推理边挖矿，最好只有只挖矿的 44%；真实在线服务时只有 0–4%。</p>
+      <p class="cap">同一张卡的挖矿收益（只挖矿 = 100）</p>
+      <div class="bars" style="grid-template-columns: 150px 1fr">
+        <span>只挖矿</span><div class="bar"><b style="width:80%;background:var(--navy)"></b><span>100</span></div>
+        <span>离线·长文档</span><div class="bar"><b style="width:35%;background:var(--bad)"></b><span class="no">44</span></div>
+        <span>在线·长文档</span><div class="bar"><b style="width:3.3%;background:var(--bad)"></b><span class="no">1.5–4.1</span></div>
+        <span>在线·真实对话</span><div class="bar"><b style="width:0.3%;background:var(--bad)"></b><span class="no">0–0.3</span></div>
+      </div>
+      <p class="hint" style="margin-top:12px">离线 = 几百个请求同时提交、GPU 一直满载的最好情况；在线 = 请求陆续到达，GPU 空闲时不挖矿。"只挖矿"用 Pearl 自己的挖矿算子测得 318 TMAC/s，第三方软件更快，真实差距更大。电脑仿真估算 44–61%（含 70B），与实测相符。</p>
+    </article>
+
+    <article class="card b">
+      <h3><i>B</i>Pearl 为什么这么设计？</h3>
+      <div class="tags"><span class="tag on">算法原理决定</span><span class="tag off">人不够</span><span class="tag on">技术不支持</span><span class="tag">工程实现问题</span></div>
+      <ul>
+        <li><b>协议不补偿有用矿工</b>：奖励只按刮了多少彩票算，协议又分不出谁在做有用功（问题 1）。论文认为也不需要补偿：理论上有用矿工几乎不多花成本。</li>
+        <li><b>"几乎不吃亏"只在理论上成立</b>：那是矩阵无限大时的结论。实测单次挖矿乘法要慢 87%–1846%；纯矿工能合法地省掉几乎全部额外工作，有用矿工没得选。</li>
+        <li><b>挖矿内核只做了 H100/H200 版本</b>：协议本身不限硬件，但官方边推理边挖的计算库只为 Hopper 架构编译。</li>
+      </ul>
+    </article>
+
+    <article class="card c">
+      <h3><i>C</i>对我们 PoCW 的启发</h3>
+      <div class="chips">
+        <div class="chip"><b>没需求</b>没奖励</div>
+        <div class="chip"><b>按任务</b>计奖励</div>
+        <div class="chip"><b>不限</b>显卡</div>
+        <div class="chip dark"><b>不限</b>模型</div>
+      </div>
+      <ul>
+        <li>不能存在"不做有用功也能拿奖励"的路径：没有真实需求、没被验收的计算一分都拿不到。</li>
+        <li>奖励按完成的有用任务计，去噪声、交付结果本身就是任务的一部分。</li>
+        <li>协议不能把有用工作绑定到某种显卡、某套内核或某个专用模型。</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="numbers" style="grid-template-columns: 1fr 70px 1fr 1.25fr">
+    <div class="t">门槛对比：做有用功的人反而门槛最高</div>
+    <div class="stat bad"><span class="lab">边推理边挖矿</span><span class="val">3 个条件</span><span class="cap2">H100/H200 + 官方插件 + 专用模型，缺一不可</span></div>
+    <div class="op">vs</div>
+    <div class="stat neutral"><span class="lab">只挖矿</span><span class="val">1 个软件</span><span class="cap2">游戏卡装第三方挖矿软件就能挖</span></div>
+    <div class="foot">
+      <div>硬件限制和三个条件由 Pearl 代码和文档证实（计算库只编译 sm_90a，插件要求计算能力 ≥ 9）</div>
+      <div>收益比：1 × H100 NVL、8B 模型实测（2026-11-08）；70B 未实测</div>
+      <div>第三方挖矿软件名单来自 Kryptex 矿池教程；它们大多不开源，"不做推理"引自 Basu 论文的字符串分析</div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,129 @@
+<div class="wrap">
+  <header>
+    <div>
+      <div class="kicker">PEARL 有用挖矿 · H100 实测</div>
+      <h1>真跑一遍：结果没变，但服务慢了，矿也几乎没挖到</h1>
+      <p class="sub">1 张 H100、Pearl 官方 vLLM 插件和官方 8B 模型，按真实用法测了准确率、延迟、挖矿覆盖率和挖矿收益。</p>
+    </div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--navy)"></i>官方说法 / 正常服务</span>
+      <span><i class="sw" style="background:var(--bad)"></i>实测不符</span>
+      <span><i class="sw" style="background:var(--ours)"></i>实测成立</span>
+    </div>
+  </header>
+
+  <section class="panel">
+    <h2>我们测了什么 <small>开、关挖矿对比；挖矿时只连本地模拟网关，不提交区块</small></h2>
+    <div class="steps">
+      <div class="step good">
+        <span class="flag ok">成立</span>
+        <div class="n"><i>01</i>准确率</div>
+        <p>GSM8K 1319 道数学题，开、关挖矿各跑一次</p>
+        <div class="big yes">84.31% = 84.31%</div>
+        <p>生成文本 <b class="yes">100% 逐字一致</b>；挖矿乘法确实被调用了 13,840 次。</p>
+      </div>
+      <div class="arrow"></div>
+      <div class="step fault">
+        <span class="flag">变慢</span>
+        <div class="n"><i>02</i>延迟</div>
+        <p>真实对话流量，每个 token 的生成时间</p>
+        <div class="big no">7.7 → 16.2 ms</div>
+        <p>Pearl 必须关掉 CUDA Graph，<b class="no">每个 token 慢一倍</b>；长文档开挖矿后首 token 再慢 2.3 倍。</p>
+      </div>
+      <div class="arrow"></div>
+      <div class="step fault">
+        <span class="flag">几乎不挖</span>
+        <div class="n"><i>03</i>挖矿覆盖率</div>
+        <p>ShareGPT 真实对话，每秒 1–16 个请求</p>
+        <div class="big no">0–3.2%</div>
+        <p>参与挖矿的计算占比。只有长文档这类长输入能挖到约 65%。</p>
+      </div>
+      <div class="arrow"></div>
+      <div class="step fault">
+        <span class="flag">远不如只挖矿</span>
+        <div class="n"><i>04</i>挖矿收益</div>
+        <p>和同一张卡只挖矿相比</p>
+        <div class="big no">0–4%</div>
+        <p>在线负载下的挖矿产出；离线大批量最好的情况也只有 <b class="no">44%</b>。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="abc">
+    <article class="card a">
+      <h3><i>A</i>慢在哪里？</h3>
+      <p class="lead">主要代价是"必须关掉 CUDA Graph"，不是挖矿本身。</p>
+      <p class="cap">每 token 生成时间（ShareGPT，每秒 4 个请求，中位数）</p>
+      <div class="bars">
+        <span>正常服务</span><div class="bar"><b style="width:39%;background:var(--navy)"></b><span>7.9 ms</span></div>
+        <span>关挖矿</span><div class="bar"><b style="width:83%;background:#e3a094"></b><span class="no">16.6 ms</span></div>
+        <span>开挖矿</span><div class="bar"><b style="width:83%;background:var(--bad)"></b><span class="no">16.6 ms</span></div>
+      </div>
+      <p class="cap" style="margin-top:14px">长文档首 token 延迟（每秒 2 个请求，中位数）</p>
+      <div class="bars">
+        <span>正常服务</span><div class="bar"><b style="width:29%;background:var(--navy)"></b><span>60 ms</span></div>
+        <span>关挖矿</span><div class="bar"><b style="width:30%;background:#e3a094"></b><span>63 ms</span></div>
+        <span>开挖矿</span><div class="bar"><b style="width:68%;background:var(--bad)"></b><span class="no">143 ms</span></div>
+      </div>
+      <p class="hint">Pearl 插件无法通过 vLLM 默认的编译器（torch.compile），关掉挖矿也只能用 eager 模式运行。</p>
+    </article>
+
+    <article class="card b">
+      <h3><i>B</i>挖了多少？</h3>
+      <p class="lead">真实对话几乎不挖；能挖的时候，产出也远不如只挖矿。</p>
+      <p class="cap">同一张卡的挖矿产出（只挖矿 = 100）</p>
+      <div class="bars">
+        <span>只挖矿</span><div class="bar"><b style="width:82%;background:var(--navy)"></b><span>100</span></div>
+        <span>离线·长文档</span><div class="bar"><b style="width:36%;background:var(--warn)"></b><span>44</span></div>
+        <span>在线·长文档</span><div class="bar"><b style="width:3.4%;background:var(--bad)"></b><span class="no">4.1</span></div>
+        <span>在线·对话</span><div class="bar"><b style="width:0.5%;background:var(--bad)"></b><span class="no">0–0.3</span></div>
+      </div>
+      <ul style="margin-top:14px">
+        <li><b>离线</b>：几百个请求同时提交，GPU 一直满载，是有用挖矿最好的情况。</li>
+        <li><b>在线</b>：请求陆续到达。GPU 空闲时 AI 服务不挖矿，只挖矿的软件却可以一直挖。</li>
+      </ul>
+      <p class="hint">"只挖矿"用的是 Pearl 自己的挖矿算子（318 TMAC/s）。第三方纯挖矿软件更快，真实差距只会更大。</p>
+    </article>
+
+    <article class="card c">
+      <h3><i>C</i>对我们 PoCW 的启发</h3>
+      <div class="chips">
+        <div class="chip"><b>真实负载</b>下测</div>
+        <div class="chip"><b>不碍</b>推理加速</div>
+        <div class="chip dark"><b>按任务</b>计奖励</div>
+      </div>
+      <ul>
+        <li>"做有用功不影响结果"要在真实负载、证明逻辑确实执行的条件下测，测试里要检查它真的执行了。</li>
+        <li>证明过程不能要求推理关掉 CUDA Graph 这类常规加速，否则做有用功的人先付出一倍的服务延迟。</li>
+        <li>奖励按完成并验收的任务计，聊天、低并发也算；不能让"只挖矿"比"做服务"更赚钱。</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="panel">
+    <h2>和 Pearl 官方说法对比</h2>
+    <table class="cmp">
+      <thead><tr><th style="width:24%">官方说法</th><th style="width:15%">来源</th><th>我们的实测</th><th style="width:16%">结论</th></tr></thead>
+      <tbody>
+        <tr><td><b>挖矿不改变 AI 输出</b></td><td>官方测试 test_consistency</td><td>官方测试的提示最长 336 个 token，不到挖矿门槛，其实没挖矿。我们真正挖矿时，1319 道题逐字一致</td><td><span class="verdict yes">成立，证据是我们补的</span></td></tr>
+        <tr><td><b>挖矿只比推理多一点点开销</b>（1+o(1)，"一份算力两份用"）</td><td>cuPOW 论文、白皮书</td><td>单次挖矿乘法比普通乘法慢 87%–1846%；还必须关掉 CUDA Graph，每 token 时间翻倍</td><td><span class="verdict no">实际尺寸下不成立</span></td></tr>
+        <tr><td><b>AI 推理的同时就在挖矿</b></td><td>Pearl 的定位</td><td>真实对话只有 0–3.2% 的计算参与挖矿，单用户时完全不挖；长文档约 65%</td><td><span class="verdict mid">只在长输入、高并发时成立</span></td></tr>
+        <tr><td><b>有用挖矿会挤出无用挖矿</b></td><td>cuPOW 论文</td><td>同一张卡，有用挖矿的产出最好是只挖矿的 44%，在线负载下 0–4%</td><td><span class="verdict no">不成立</span></td></tr>
+        <tr><td><b>70B 在 4×H200 上挖矿开销 +5.08%</b></td><td>官方数据（第三方转述）</td><td>测试条件和基线未公开，仓库里没有脚本。我们测的 8B 端到端多 7–21%，还不算关掉 CUDA Graph 的代价</td><td><span class="verdict mid">无法复现</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="numbers" style="grid-template-columns: repeat(4, 1fr) 1.35fr">
+    <div class="t">一句话：结果是对的，但"推理即挖矿"在真实服务里基本不成立</div>
+    <div class="stat good"><span class="lab">挖矿时 AI 输出</span><span class="val">100%</span><span class="cap2">与不挖矿逐字一致</span></div>
+    <div class="stat bad"><span class="lab">每 token 生成时间</span><span class="val">×2.1</span><span class="cap2">因为必须关掉 CUDA Graph</span></div>
+    <div class="stat bad"><span class="lab">真实对话参与挖矿</span><span class="val">0–3.2%</span><span class="cap2">ShareGPT，每秒 1–16 个请求</span></div>
+    <div class="stat bad"><span class="lab">挖矿产出 / 只挖矿</span><span class="val">0–4%</span><span class="cap2">在线负载；离线最好 44%</span></div>
+    <div class="foot">
+      <div>环境：1 × H100 NVL，Pearl 156ef9a8 官方 vLLM 插件，Llama-3.1-8B-Instruct-pearl，2026-11-08</div>
+      <div>只连本地模拟网关，不连 Pearl 网络、不提交区块；70B 未测（需要 H200）</div>
+      <div>脚本和原始数据：github.com/hetu-project/pearl-pouw-analysis 的 benchmarks/GPU-mining-impact</div>
+    </div>
+  </section>
+</div>

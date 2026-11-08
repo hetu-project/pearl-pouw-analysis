@@ -2,6 +2,8 @@
 
 在一张 H100 上实测 Pearl 官方 vLLM 插件开着挖矿时，AI 服务的结果、延迟、算力和收益会受什么影响。
 
+![H100 实测汇总](../../docs/images/GPU-measurement.png)
+
 | 环境 | |
 |---|---|
 | GPU | 1 × NVIDIA H100 NVL（94 GB），驱动 595.91.07，CUDA 13.2（vast.ai 租用，2026-11-08） |
