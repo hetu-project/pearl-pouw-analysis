@@ -63,6 +63,6 @@
 | `results/reference-trigger-table.txt` | 第 1 部分参考输出 |
 | `results/reference-workload-sim.txt` | 第 2 部分参考输出（固定随机种子，重跑结果应完全一致） |
 
-## 尚需 GPU 实测的部分
+## GPU 实测
 
-在真实 vLLM 上测量比例：1×H100 跑 8B，1×H200 跑 70B，使用官方 Docker 并加插桩，约 20 GPU 小时、80–120 美元。触发规则、可挖层、"纯解码步不挖"三点由代码决定，不需要实测。
+8B 模型的覆盖率已在 1×H100 NVL 上用 `vllm serve` + `vllm bench serve` 实测：ShareGPT 真实对话在每秒 1、4、16 个请求时分别为 0%、0%、3.2%，长文档约 65%（分母为线性层乘加）。程序和结果见 [`../GPU-mining-impact`](../GPU-mining-impact)。70B 需要 H200，尚未实测。

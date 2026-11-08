@@ -1,6 +1,6 @@
 # P05：官方"挖矿不影响 AI 结果"的测试从未真正挖过矿
 
-**严重程度：中等** ｜ **结论**：官方测试不成立，由代码证实；挖矿到底影不影响结果，要在 H100/H200 上实测，测试已写好，尚未运行 ｜ Benchmark：[`benchmarks/P05-result-accuracy`](../../benchmarks/P05-result-accuracy)
+**严重程度：中等** ｜ **结论**：官方测试不成立，由代码证实；我们在 H100 上补做了实测，挖矿不改变 8B 模型在 GSM8K 上的结果 ｜ Benchmark：[`benchmarks/P05-result-accuracy`](../../benchmarks/P05-result-accuracy)
 
 Pearl 说挖矿的同时产出有用的 AI 结果。那么开着挖矿时，AI 的回答和不挖矿时一样准吗？协议本身从不检查有用结果（P01），这件事只能靠官方的测试来保证。我们看了官方的测试，它的思路是对的，但数据对不上：两次运行都没有真正挖矿。
 
@@ -43,18 +43,21 @@ Pearl 说挖矿的同时产出有用的 AI 结果。那么开着挖矿时，AI �
 2. **用评测集比准确率**：例如 GSM8K 全部 1319 道题，比较两次的准确率，以及每道题的答案是否一致；
 3. **记录条件**：模型、显卡、并发数、挖矿调用次数，让别人能重跑。
 
-## 我们写好的测试
+## 我们的实测
 
-[`gpu/p05_gpu_check.py`](../../benchmarks/P05-result-accuracy/gpu/p05_gpu_check.py) 按上面的方法实现：
-- 用 Pearl 官方的方式启动挖矿：本地网关加官方测试自带的模拟区块模板，不提交区块，不连网络；
-- 一次提交 GSM8K 全部测试题，`max_num_seqs=1024`；
-- 开、关挖矿各跑一次，统计挖矿乘法的调用次数，比较准确率和逐题答案。
+[`gpu/p05_gpu_check.py`](../../benchmarks/P05-result-accuracy/gpu/p05_gpu_check.py) 按上面的方法实现：用 Pearl 官方的方式启动挖矿（本地网关加官方测试自带的模拟区块模板，不提交区块，不连网络），一次提交 GSM8K 全部 1319 题，`max_num_seqs=1024`，开、关挖矿各跑一次。2026-11-08 在 1 张 H100 NVL 上运行（Pearl `156ef9a8`，vLLM 0.20.2，模型 `pearl-ai/Llama-3.1-8B-Instruct-pearl` 版本 `5dcb348a`）：
 
-**这个测试需要 H100/H200**：Pearl 的挖矿计算库只为 Hopper 架构编译（P03），我们没有这类显卡，所以还没有运行过。8B 模型预计不到 1 GPU 小时。
+| | 关挖矿 | 开挖矿 |
+|---|---|---|
+| 准确率 | 84.31% | 84.31% |
+| 挖矿乘法实际调用次数 | 0 | 13,840（最小 m = 1024） |
+| 生成文本与另一次逐字相同 | 100% | 100% |
 
-跑完之后，无论结果如何，都比现在有说服力：
-- 准确率有明显差异，就说明挖矿确实影响结果；
-- 没有差异，就可以写明"实测挖矿不影响 8B 在 GSM8K 上的准确率"。
+单个矩阵乘法也逐位一致：8B 模型三种可挖层、m 从 256 到 8192，挖矿乘法去噪后的输出与普通乘法完全相同（[`GPU-mining-impact/kernel_overhead.py`](../../benchmarks/GPU-mining-impact/kernel_overhead.py)）。
+
+**结论**：挖矿去噪后的结果与不挖矿逐位相同，挖矿本身不改变 AI 结果。问题出在官方测试：它没有真正挖矿，所以本来证明不了这一点；现在由实测补上。
+
+输出见 [`results/reference-gpu-compare.txt`](../../benchmarks/P05-result-accuracy/results/reference-gpu-compare.txt)，逐题结果在同目录的 `gpu-mining-*.json`。这次只测了 8B 模型；70B 需要 H200 或多卡。挖矿对延迟和算力的影响见 [`benchmarks/GPU-mining-impact`](../../benchmarks/GPU-mining-impact)。
 
 ## 对我们的启发
 

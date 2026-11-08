@@ -1,0 +1,49 @@
+
+o_proj m=4096 n=4096 k=4096  vanilla: wall 0.232 ms/call, GPU kernels 0.125 ms/call, GPU idle 0.107 ms/call
+       0.125 ms  void pearl::hopper_gemm_ws<pearl::KernelTraits<signed char, cutlass::bfloat16_t, cutlass::half_t, float, cute:
+
+o_proj m=4096 n=4096 k=4096  noisy: wall 0.977 ms/call, GPU kernels 0.379 ms/call, GPU idle 0.598 ms/call
+       0.149 ms  void pearl::hopper_gemm_ws<pearl::KernelTraits<signed char, cutlass::bfloat16_t, cutlass::half_t, float, cute:
+       0.065 ms  void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{la
+       0.054 ms  void cutlass::device_kernel<pearl::MerkleTreeRootsKernel<128, 2, 128, false> >(pearl::MerkleTreeRootsKernel<12
+       0.037 ms  void cutlass::device_kernel<pearl::NoisingKernelB<cute::tuple<cute::C<64>, cute::C<128>, cute::C<64> >, 128, s
+       0.036 ms  void cutlass::device_kernel<pearl::NoisingKernelA<cute::tuple<cute::C<64>, cute::C<128>, cute::C<64> >, 128, s
+       0.015 ms  void cutlass::device_kernel<pearl::ComputeBlakeMTKernel<512, true> >(pearl::ComputeBlakeMTKernel<512, true>::P
+       0.008 ms  void cutlass::device_kernel<pearl::NoiseGenerationKernel<128, 64> >(pearl::NoiseGenerationKernel<128, 64>::Par
+       0.007 ms  Memcpy HtoD (Pageable -> Device)
+       0.004 ms  Memcpy DtoD (Device -> Device)
+       0.003 ms  void cutlass::device_kernel<pearl::CommitmentHashFromMerkleRootsKernel>(pearl::CommitmentHashFromMerkleRootsKe
+       0.001 ms  void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<signed char>, std::array<char*, 1ul>
+
+gate_up_proj m=4096 n=28672 k=4096  vanilla: wall 1.182 ms/call, GPU kernels 1.078 ms/call, GPU idle 0.105 ms/call
+       1.078 ms  void pearl::hopper_gemm_ws<pearl::KernelTraits<signed char, cutlass::bfloat16_t, cutlass::half_t, float, cute:
+
+gate_up_proj m=4096 n=28672 k=4096  noisy: wall 2.288 ms/call, GPU kernels 1.958 ms/call, GPU idle 0.330 ms/call
+       1.287 ms  void pearl::hopper_gemm_ws<pearl::KernelTraits<signed char, cutlass::bfloat16_t, cutlass::half_t, float, cute:
+       0.256 ms  void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{la
+       0.164 ms  void cutlass::device_kernel<pearl::NoisingKernelB<cute::tuple<cute::C<64>, cute::C<128>, cute::C<64> >, 128, s
+       0.160 ms  void cutlass::device_kernel<pearl::MerkleTreeRootsKernel<128, 2, 128, false> >(pearl::MerkleTreeRootsKernel<12
+       0.037 ms  void cutlass::device_kernel<pearl::NoisingKernelA<cute::tuple<cute::C<64>, cute::C<128>, cute::C<64> >, 128, s
+       0.016 ms  void cutlass::device_kernel<pearl::ComputeBlakeMTKernel<512, false> >(pearl::ComputeBlakeMTKernel<512, false>:
+       0.013 ms  void cutlass::device_kernel<pearl::NoiseGenerationKernel<128, 64> >(pearl::NoiseGenerationKernel<128, 64>::Par
+       0.008 ms  Memcpy HtoD (Pageable -> Device)
+       0.008 ms  void cutlass::device_kernel<pearl::ComputeBlakeMTKernel<512, true> >(pearl::ComputeBlakeMTKernel<512, true>::P
+       0.004 ms  Memcpy DtoD (Device -> Device)
+       0.003 ms  void cutlass::device_kernel<pearl::CommitmentHashFromMerkleRootsKernel>(pearl::CommitmentHashFromMerkleRootsKe
+       0.002 ms  void cutlass::device_kernel<pearl::ReduceRootsKernel<128> >(pearl::ReduceRootsKernel<128>::Params)
+
+narrow_n m=4096 n=1024 k=4096  vanilla: wall 0.145 ms/call, GPU kernels 0.029 ms/call, GPU idle 0.116 ms/call
+       0.029 ms  void pearl::hopper_gemm_ws<pearl::KernelTraits<signed char, cutlass::bfloat16_t, cutlass::half_t, float, cute:
+
+narrow_n m=4096 n=1024 k=4096  noisy: wall 0.957 ms/call, GPU kernels 0.240 ms/call, GPU idle 0.717 ms/call
+       0.053 ms  void cutlass::device_kernel<pearl::MerkleTreeRootsKernel<128, 2, 128, false> >(pearl::MerkleTreeRootsKernel<12
+       0.043 ms  void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{la
+       0.037 ms  void cutlass::device_kernel<pearl::NoisingKernelA<cute::tuple<cute::C<64>, cute::C<128>, cute::C<64> >, 128, s
+       0.037 ms  void pearl::hopper_gemm_ws<pearl::KernelTraits<signed char, cutlass::bfloat16_t, cutlass::half_t, float, cute:
+       0.035 ms  void cutlass::device_kernel<pearl::NoisingKernelB<cute::tuple<cute::C<64>, cute::C<128>, cute::C<64> >, 128, s
+       0.013 ms  void cutlass::device_kernel<pearl::ComputeBlakeMTKernel<512, true> >(pearl::ComputeBlakeMTKernel<512, true>::P
+       0.008 ms  void cutlass::device_kernel<pearl::NoiseGenerationKernel<128, 64> >(pearl::NoiseGenerationKernel<128, 64>::Par
+       0.007 ms  Memcpy HtoD (Pageable -> Device)
+       0.003 ms  Memcpy DtoD (Device -> Device)
+       0.003 ms  void cutlass::device_kernel<pearl::CommitmentHashFromMerkleRootsKernel>(pearl::CommitmentHashFromMerkleRootsKe
+       0.001 ms  void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<signed char>, std::array<char*, 1ul>

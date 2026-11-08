@@ -1,0 +1,19 @@
+model pearl-ai/Llama-3.1-8B-Instruct-pearl on NVIDIA H100 NVL
+
+chat
+  config                   s     out tok/s   TTFT p50 ms   TTFT p90 ms   TPOT p50 ms       power W       mem MiB  mined/linear
+  graph                 9.14       14348.0        1787.5        2164.3          28.6         367.4       87381.0           0.0
+  eager                  9.3       14095.0        1798.6        2179.6         29.11         375.7       87821.0           0.0
+  eager_mine            9.98       13128.0        2280.1        2936.8         29.91         376.7       87891.0        0.3008
+
+long
+  config                   s     out tok/s   TTFT p50 ms   TTFT p90 ms   TPOT p50 ms       power W       mem MiB  mined/linear
+  graph                14.37        1140.2        6189.9       11443.3        125.24         375.0       87381.0           0.0
+  eager                14.45        1134.1        6170.5       11413.3        125.79         377.0       87827.0           0.0
+  eager_mine           17.42         940.4        8139.1       14572.2        141.73         391.5       87891.0        0.6577
+
+single
+  config                   s     out tok/s   TTFT p50 ms   TTFT p90 ms   TPOT p50 ms       power W       mem MiB  mined/linear
+  graph                 9.78         130.8          20.5          23.5          7.59         306.5       87381.0           0.0
+  eager                20.75          61.7          34.8          38.4         16.14         206.6       87827.0           0.0
+  eager_mine           20.73          61.7          34.4          38.0         16.06         210.4       87891.0           0.0

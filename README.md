@@ -24,14 +24,14 @@ This repository does **not** modify Pearl. Benchmarks are small example programs
 | # | Problem | Severity | Status | Docs | Benchmark |
 |---|---|---|---|---|---|
 | P01 | Any matrix, including all-zero, can mine valid blocks; "usefulness" is not verified / 任意矩阵（包括全零矩阵）都能挖矿出块，"有用"无法验证 | Critical / 致命 | Confirmed by experiment / 实验证实 | [docs/problems/P01-any-matrix-mines.md](docs/problems/P01-any-matrix-mines.md) | [benchmarks/P01-any-matrix](benchmarks/P01-any-matrix) |
-| P02 | Useful-mining coverage is low: only steps with ≥1024 tokens mine; about 0–5% of inference compute on chat workloads / 有用挖矿覆盖率低：单步 ≥1024 个 token 才挖，对话类负载约 0–5% | Serious / 严重 | Rule confirmed by code; ratios estimated, GPU measurement pending / 规则由代码证实，比例为 CPU 仿真估算，待 GPU 实测 | [docs/problems/P02-mining-coverage.md](docs/problems/P02-mining-coverage.md) | [benchmarks/P02-mining-coverage](benchmarks/P02-mining-coverage) |
-| P03 | Useful mining earns at most 44–61% of the shares pure mining earns on the same GPU; the official useful miner runs only on H100/H200 / 有用挖矿比纯挖矿更不划算：同一张卡上份额产出最多只有纯挖矿的 44–61%，官方软件只支持 H100/H200 | Serious / 严重 | Cost structure confirmed by code; ratios from CPU simulation, GPU measurement pending / 开销结构由代码证实，比例为 CPU 仿真估算，待 GPU 实测 | [docs/problems/P03-useful-vs-pure.md](docs/problems/P03-useful-vs-pure.md) | [benchmarks/P03-useful-vs-pure](benchmarks/P03-useful-vs-pure) |
+| P02 | Useful-mining coverage is low: only steps with ≥1024 tokens mine; about 0–5% of inference compute on chat workloads / 有用挖矿覆盖率低：单步 ≥1024 个 token 才挖，对话类负载约 0–5% | Serious / 严重 | Rule confirmed by code; 8B measured on H100: 0–3.2% on ShareGPT traffic / 规则由代码证实；8B 已在 H100 实测，真实对话 0–3.2% | [docs/problems/P02-mining-coverage.md](docs/problems/P02-mining-coverage.md) | [benchmarks/P02-mining-coverage](benchmarks/P02-mining-coverage) |
+| P03 | Useful mining earns at most 44–61% of the shares pure mining earns on the same GPU; the official useful miner runs only on H100/H200 / 有用挖矿比纯挖矿更不划算：同一张卡上份额产出最多只有纯挖矿的 44–61%，官方软件只支持 H100/H200 | Serious / 严重 | Cost structure confirmed by code; 8B measured on H100: 44% at best, 0–4% under online load / 开销结构由代码证实；8B 已在 H100 实测，最好 44%，在线负载 0–4% | [docs/problems/P03-useful-vs-pure.md](docs/problems/P03-useful-vs-pure.md) | [benchmarks/P03-useful-vs-pure](benchmarks/P03-useful-vs-pure) |
 | P04 | Miner, pool and consensus apply different rules: 11–19% of useful mining is wasted on multi-GPU setups, up to 76% on the MoE model; pool shares overvalued r/128x / 矿工、矿池、共识三方的规则不一致：多卡配置下 11–19% 的有用挖矿注定作废，MoE 模型最多 76%；矿池份额被高估 r/128 倍 | Medium / 中等 | Confirmed by local experiment / 本机实验证实 | [docs/problems/P04-rule-mismatch.md](docs/problems/P04-rule-mismatch.md) | [benchmarks/P04-rule-mismatch](benchmarks/P04-rule-mismatch) |
-| P05 | The official "mining does not change the output" test never actually mines: its longest prompt is 336 tokens, below the 1024-token threshold / 官方"挖矿不影响 AI 结果"的测试从未真正挖过矿：测试提示最长 336 个 token，不到 1024 的挖矿门槛 | Medium / 中等 | Flaw in the official test confirmed by code; GPU check written, needs H100/H200 / 官方测试不成立由代码证实；GPU 测试已写好，需 H100/H200 运行 | [docs/problems/P05-result-accuracy.md](docs/problems/P05-result-accuracy.md) | [benchmarks/P05-result-accuracy](benchmarks/P05-result-accuracy) |
+| P05 | The official "mining does not change the output" test never actually mines: its longest prompt is 336 tokens, below the 1024-token threshold / 官方"挖矿不影响 AI 结果"的测试从未真正挖过矿：测试提示最长 336 个 token，不到 1024 的挖矿门槛 | Medium / 中等 | Flaw in the official test confirmed by code; on an H100 mining did not change any of 1319 GSM8K answers / 官方测试不成立由代码证实；H100 实测挖矿不改变结果（GSM8K 1319 题逐字一致） | [docs/problems/P05-result-accuracy.md](docs/problems/P05-result-accuracy.md) | [benchmarks/P05-result-accuracy](benchmarks/P05-result-accuracy) |
 
-Summary of all problems: [docs/problem-analysis.md](docs/problem-analysis.md). More problems will be added one per commit.
+Summary of all problems: [docs/problem-analysis.md](docs/problem-analysis.md). GPU measurements on one H100 (accuracy, latency, mining overhead, coverage, useful vs pure mining): [benchmarks/GPU-mining-impact](benchmarks/GPU-mining-impact).
 
-问题汇总分析见 [docs/problem-analysis.md](docs/problem-analysis.md)。共 5 个问题，每个问题一个 commit。
+问题汇总分析见 [docs/problem-analysis.md](docs/problem-analysis.md)。共 5 个问题。H100 实测（准确率、延迟、挖矿开销、覆盖率、有用挖矿 vs 纯挖矿）见 [benchmarks/GPU-mining-impact](benchmarks/GPU-mining-impact)。
 
 ## Repository layout / 目录结构
 
@@ -45,6 +45,7 @@ docs/
   references.md         论文与外部资料链接
 benchmarks/
   P01-.../              每个问题的 benchmark：程序、运行脚本、参考结果
+  GPU-mining-impact/    H100 实测：挖矿对 AI 服务的影响
 experiments/            研究笔记引用的辅助实验脚本与输出
 scripts/
   setup-pearl.sh        拉取固定版本的 Pearl 源码

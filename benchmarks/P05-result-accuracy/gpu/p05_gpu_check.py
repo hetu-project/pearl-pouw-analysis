@@ -4,7 +4,8 @@ P05 GPU check: does mining change the useful output?
 
 Needs an H100/H200 and Pearl's miner environment (vllm, vllm-miner, pearl-gateway, pearl-mining
 installed as in Pearl's miner README), plus the `datasets` package for GSM8K.
-WRITTEN BUT NOT YET RUN: we have no Hopper GPU, and Pearl's mining kernel builds only for sm_90a.
+Pearl's mining kernel builds only for sm_90a. Run on an H100 NVL on 2026-11-08; output in
+../results/reference-gpu-compare.txt.
 
 This is the comparison Pearl's own test (miner/vllm-miner/tests/test_vllm_execution.py,
 test_consistency) intends, set up so that mining really happens:
@@ -117,11 +118,13 @@ def run(args):
     from vllm import LLM, SamplingParams
 
     import vllm_miner.vllm_kernels as kernels
-    from vllm_miner.mining_state import init_async_manager
+    from vllm_miner.mining_state import get_async_manager, init_async_manager, init_pinned_pool
 
     settings = MinerSettings()
     assert settings.no_mining == no_mining and settings.skip_block_submission
+    # register.py does both only in a vLLM worker process; with multiprocessing off we are not one
     init_async_manager(settings)
+    init_pinned_pool(get_async_manager()._conf.pinned_pool_size)
 
     stats = {"calls": 0, "rows": 0, "min_m": None}
     original = kernels.pearl_gemm_noisy

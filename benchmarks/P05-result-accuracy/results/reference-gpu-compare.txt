@@ -1,0 +1,5 @@
+model pearl-ai/Llama-3.1-8B-Instruct-pearl, 1319 GSM8K questions, NVIDIA H100 NVL
+  noisy GEMM calls with mining on: 13840 (smallest m 1024)
+  accuracy  mining off 84.31%   mining on 84.31%   difference +0.00 points
+  identical generated text: 100.0%   identical final answer: 100.0%
+  questions right only with mining off: 0   right only with mining on: 0
