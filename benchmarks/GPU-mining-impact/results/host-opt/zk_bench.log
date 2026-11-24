@@ -1,0 +1,58 @@
+===== CPU =====
+40
+model name	: AMD EPYC 9V84 96-Core Processor
+===== bench: prove/verify vs size =====
+[2026-11-20T09:04:03Z INFO  prove_verify] 
+    ========== Benchmark: Prove Time vs Problem Size ==========
+[2026-11-20T09:04:03Z INFO  prove_verify] 
+    === Testing common_dim = 3584 with tile_size = 64 | raw witness = 231 KB ===
+[2026-11-20T09:04:07Z INFO  zk_pow::circuit::pearl_circuit] Stark #0 proof time: 853.661203ms || num_rows: 32768
+[2026-11-20T09:04:08Z INFO  zk_pow::circuit::pearl_circuit] Recursion Circuit #1 prove time: 1.035244411s || proof size: 171078
+[2026-11-20T09:04:09Z INFO  zk_pow::circuit::pearl_circuit] Second recursion prove time: 564.61628ms || proof size: 59538
+[2026-11-20T09:04:09Z INFO  prove_verify]   Prove time: 2.521555247s
+[2026-11-20T09:04:09Z INFO  zk_pow::api::sanity_checks] Difficulty is too easy: hardness=4096 adjustment_factor=458752
+[2026-11-20T09:04:09Z INFO  prove_verify]   Verify time: 8.066986ms
+[2026-11-20T09:04:09Z INFO  prove_verify] 
+    === Testing common_dim = 7168 with tile_size = 64 | raw witness = 462 KB ===
+[2026-11-20T09:04:15Z INFO  zk_pow::circuit::pearl_circuit] Stark #0 proof time: 1.726227813s || num_rows: 65536
+[2026-11-20T09:04:16Z INFO  zk_pow::circuit::pearl_circuit] Recursion Circuit #1 prove time: 1.055544276s || proof size: 171078
+[2026-11-20T09:04:17Z INFO  zk_pow::circuit::pearl_circuit] Second recursion prove time: 552.635397ms || proof size: 59538
+[2026-11-20T09:04:17Z INFO  prove_verify]   Prove time: 3.453576225s
+[2026-11-20T09:04:17Z INFO  zk_pow::api::sanity_checks] Difficulty is too easy: hardness=4096 adjustment_factor=917504
+[2026-11-20T09:04:17Z INFO  prove_verify]   Verify time: 12.146507ms
+[2026-11-20T09:04:17Z INFO  prove_verify] 
+    === Testing common_dim = 14336 with tile_size = 64 | raw witness = 924 KB ===
+[2026-11-20T09:04:27Z INFO  zk_pow::circuit::pearl_circuit] Stark #0 proof time: 3.52842779s || num_rows: 131072
+[2026-11-20T09:04:28Z INFO  zk_pow::circuit::pearl_circuit] Recursion Circuit #1 prove time: 1.087521021s || proof size: 171078
+[2026-11-20T09:04:29Z INFO  zk_pow::circuit::pearl_circuit] Second recursion prove time: 572.501143ms || proof size: 59538
+[2026-11-20T09:04:29Z INFO  prove_verify]   Prove time: 5.42426646s
+[2026-11-20T09:04:29Z INFO  zk_pow::api::sanity_checks] Difficulty is too easy: hardness=4096 adjustment_factor=1835008
+[2026-11-20T09:04:29Z INFO  prove_verify]   Verify time: 16.369188ms
+[2026-11-20T09:04:29Z INFO  prove_verify] 
+    === Testing common_dim = 28672 with tile_size = 64 | raw witness = 1848 KB ===
+[2026-11-20T09:04:47Z INFO  zk_pow::circuit::pearl_circuit] Stark #0 proof time: 7.248529356s || num_rows: 262144
+[2026-11-20T09:04:48Z INFO  zk_pow::circuit::pearl_circuit] Recursion Circuit #1 prove time: 1.110252328s || proof size: 171078
+[2026-11-20T09:04:49Z INFO  zk_pow::circuit::pearl_circuit] Second recursion prove time: 556.398617ms || proof size: 59538
+[2026-11-20T09:04:49Z INFO  prove_verify]   Prove time: 9.406068934s
+[2026-11-20T09:04:49Z INFO  zk_pow::api::sanity_checks] Difficulty is too easy: hardness=4096 adjustment_factor=3670016
+[2026-11-20T09:04:49Z INFO  prove_verify]   Verify time: 25.204671ms
+[2026-11-20T09:04:49Z INFO  prove_verify] 
+    === Testing common_dim = 57344 with tile_size = 64 | raw witness = 3696 KB ===
+[2026-11-20T09:05:27Z INFO  zk_pow::circuit::pearl_circuit] Stark #0 proof time: 16.204820061s || num_rows: 524288
+[2026-11-20T09:05:28Z INFO  zk_pow::circuit::pearl_circuit] Recursion Circuit #1 prove time: 1.136409729s || proof size: 171078
+[2026-11-20T09:05:28Z INFO  zk_pow::circuit::pearl_circuit] Second recursion prove time: 606.570395ms || proof size: 59538
+[2026-11-20T09:05:28Z INFO  prove_verify]   Prove time: 19.019524043s
+[2026-11-20T09:05:28Z INFO  zk_pow::api::sanity_checks] Difficulty is too easy: hardness=4096 adjustment_factor=7340032
+[2026-11-20T09:05:28Z INFO  prove_verify]   Verify time: 61.915673ms
+[2026-11-20T09:05:28Z INFO  prove_verify] 
+    === Benchmark Complete ===
+===== cache: circuit cache load =====
+[2026-11-20T09:05:30Z INFO  prove_verify] 
+    ========== Benchmark: Load Embedded Cache ==========
+[2026-11-20T09:05:30Z INFO  prove_verify] Cache load time: 7.58µs || # first circuits: 0, # second circuits: 0
+[2026-11-20T09:05:30Z INFO  prove_verify] 
+    === Filling Verifier Cache from Scratch ===
+[2026-11-20T09:05:30Z INFO  zk_pow::circuit::pearl_circuit] Filling verifier cache with all parameter combinations...
+[2026-11-20T09:05:30Z INFO  zk_pow::circuit::pearl_circuit] Total parameter combinations to compile: 13
+[2026-11-20T09:05:39Z INFO  prove_verify] Cache fill time: 9.689010437s || # first circuits: 13, # second circuits: 2
+ZK_BENCH_DONE

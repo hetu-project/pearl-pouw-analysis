@@ -1,0 +1,32 @@
+{
+ "config": "eager_mine",
+ "mining": true,
+ "eager": true,
+ "model": "pearl-ai/Llama-3.1-8B-Instruct-pearl",
+ "gpu": "NVIDIA H100 NVL",
+ "workloads": {
+  "chat": {
+   "n": 512,
+   "inp": 200,
+   "out": 256,
+   "sequential": false,
+   "seed": 1,
+   "seconds": 24.39,
+   "output_tok_per_s": 5373.4,
+   "total_tok_per_s": 9571.3,
+   "ttft_ms_p50": 2096.9,
+   "ttft_ms_p90": 2698.5,
+   "tpot_ms_p50": 86.67,
+   "tpot_ms_p90": 90.68,
+   "power_w_mean": 251.2,
+   "memory_mib_max": 90001.0,
+   "util_pct_mean": 50.2,
+   "layer_calls": 20960,
+   "mined_calls": 20960,
+   "steps": 262,
+   "tokens_processed": 232960,
+   "mined_share_of_7bit_macs": 1.0,
+   "mined_share_of_linear_macs": 0.6731
+  }
+ }
+}

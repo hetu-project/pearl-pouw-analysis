@@ -42,8 +42,31 @@ def _install():
         return original(self, layer, x, w_q, *rest, **kw)
 
     mod.PearlKernel._apply_weights_mining = recorded
+
+    def patch_moe():
+        # Mixture-of-experts models: the expert gate/up GEMM goes through PearlMoEExperts.apply,
+        # which mines when the whole step has enough tokens (not per expert).
+        moe = sys.modules.get("vllm_miner.pearl_moe_experts")
+        if moe is None or getattr(moe, "_recorded", False):
+            return
+        moe._recorded = True
+        original_apply = moe.PearlMoEExperts.apply
+
+        def recorded_apply(self, output, hidden_states, w1, w2, topk_weights, topk_ids, *rest, **kw):
+            _, tokens, n, k, topk = self.moe_problem_size(hidden_states, w1, w2, topk_ids)
+            mined = config.should_use_noisy_gemm(tokens, n, k) and not config.settings.no_mining
+            macs = tokens * topk * n * k
+            totals["calls"] += 1
+            totals["macs"] += macs
+            if mined:
+                totals["mined_calls"] += 1
+                totals["mined_macs"] += macs
+            return original_apply(self, output, hidden_states, w1, w2, topk_weights, topk_ids, *rest, **kw)
+
+        moe.PearlMoEExperts.apply = recorded_apply
     path = os.path.join(_DIR, f"{os.getpid()}.json")
     while True:
+        patch_moe()
         tmp = path + ".tmp"
         with open(tmp, "w") as f:
             json.dump(totals, f)

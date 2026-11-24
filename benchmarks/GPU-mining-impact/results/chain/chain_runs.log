@@ -1,0 +1,119 @@
+HEIGHT_BEFORE 0
+PEERS 0
+10:    min_m: 16
+miner rc=0
+CHAIN: mining restricted to 16 <= m <= 64
+CHAIN: generation finished, draining proofs for 90 s
+CHAIN_RESULT {"tag": "C_stock_m24", "fast": false, "m_range": [16, 64], "batch": 24, "min_m_config": 16, "gen_seconds": 740.9, "rounds": 1, "output_tokens": 1536, "mined_calls": 5040, "plain_calls": 80, "mined_m_min": 24, "mined_m_max": 24, "mined_m_hist": {"24": 5040}}
+HEIGHT_AFTER 10
+BLOCKS_ACCEPTED 10
+PEERS 0
+--- miner log counts
+  miner   'Block found!': 5040
+  miner   'Received PlainProof': 0
+  miner   'verified ZK proof': 0
+  miner   'Failed to verify': 0
+  miner   'Error': 0
+  miner   'rejected': 0
+  miner   'old header': 0
+  miner   'stale': 0
+--- gateway log counts
+  gateway 'Received PlainProof': 10
+  gateway 'verified ZK proof': 0
+  gateway 'submitblock': 0
+  gateway 'Block submitted': 0
+  gateway 'accepted': 20
+  gateway 'rejected': 0
+  gateway 'Failed': 0
+  gateway 'Error': 0
+  gateway 'old header': 4707
+  gateway 'stale': 0
+--- node log
+2026-11-22 16:39:18.015 [INF] RPCS: Accepted block 286a392aec6d255ad464a06605b459d5007d6ac731150335926ce14683d13da5 via submitblock
+2026-11-22 16:40:43.574 [INF] RPCS: Accepted block 392625fbfa9060763e91011b064f3dff263d613bcfdd135b76cc07fa802a2250 via submitblock
+2026-11-22 16:42:04.409 [INF] RPCS: Accepted block c1238cfbed006dfcf326c0e720420a46fbcbfb9ac1a8312b3499e90685999e3c via submitblock
+2026-11-22 16:43:23.314 [INF] RPCS: Accepted block d4e6e890dbfa2e58a3f205cba44364922298395e6ac9d32390bd260e3d191b42 via submitblock
+2026-11-22 16:44:47.807 [INF] RPCS: Accepted block 419f06edec1c52a5db78f09b7b7f1a2ec43a5648516448e9931bbd76c4beb62c via submitblock
+0
+CHAIN_RUN_DONE C_stock_m24
+REVERTED tracked changes: 0
+HEIGHT_BEFORE 0
+PEERS 0
+10:    min_m: 16
+miner rc=0
+CHAIN: fast path installed
+CHAIN: mining restricted to 16 <= m <= 64
+CHAIN: generation finished, draining proofs for 90 s
+CHAIN_RESULT {"tag": "B_fast_m24", "fast": true, "m_range": [16, 64], "batch": 24, "min_m_config": 16, "gen_seconds": 727.4, "rounds": 1, "output_tokens": 1536, "mined_calls": 5040, "plain_calls": 80, "mined_m_min": 24, "mined_m_max": 24, "mined_m_hist": {"24": 5040}}
+HEIGHT_AFTER 9
+BLOCKS_ACCEPTED 9
+PEERS 0
+--- miner log counts
+  miner   'Block found!': 5040
+  miner   'Received PlainProof': 0
+  miner   'verified ZK proof': 0
+  miner   'Failed to verify': 0
+  miner   'Error': 0
+  miner   'rejected': 0
+  miner   'old header': 0
+  miner   'stale': 0
+--- gateway log counts
+  gateway 'Received PlainProof': 9
+  gateway 'verified ZK proof': 0
+  gateway 'submitblock': 0
+  gateway 'Block submitted': 0
+  gateway 'accepted': 18
+  gateway 'rejected': 0
+  gateway 'Failed': 0
+  gateway 'Error': 0
+  gateway 'old header': 4740
+  gateway 'stale': 0
+--- node log
+2026-11-22 16:52:32.843 [INF] RPCS: Accepted block cac9ee0496c7eb650efa7840f6fec3d07492fa244c2f4058788b29bbe761f7cb via submitblock
+2026-11-22 16:54:07.836 [INF] RPCS: Accepted block 7bc3d569add0312e3e95b9bdd4827c7e69fb722a58783e949f2517480900bffa via submitblock
+2026-11-22 16:55:37.321 [INF] RPCS: Accepted block 297177fb9d3fc8392204819d7b20bdbd33a1444a155c1c023a11e299435553f1 via submitblock
+2026-11-22 16:57:12.982 [INF] RPCS: Accepted block 7586d30db1c1f7cf71a29144f50ce0447efe7ff4f66e058ca096a9f9dffa4cb0 via submitblock
+2026-11-22 16:58:42.779 [INF] RPCS: Accepted block cd5393d3ee64aaa70ad8b70a507d0841bd4f2af7a70a45d50cded78b12b5b1c0 via submitblock
+0
+CHAIN_RUN_DONE B_fast_m24
+REVERTED tracked changes: 0
+HEIGHT_BEFORE 0
+PEERS 0
+10:    min_m: 16
+miner rc=0
+CHAIN: fast path installed
+CHAIN: generation finished, draining proofs for 90 s
+CHAIN_RESULT {"tag": "D_fast_all", "fast": true, "m_range": null, "batch": 24, "min_m_config": 16, "gen_seconds": 706.5, "rounds": 1, "output_tokens": 1536, "mined_calls": 5120, "plain_calls": 0, "mined_m_min": 24, "mined_m_max": 4800, "mined_m_hist": {"24": 5040, "4800": 80}}
+HEIGHT_AFTER 10
+BLOCKS_ACCEPTED 10
+PEERS 0
+--- miner log counts
+  miner   'Block found!': 5440
+  miner   'Received PlainProof': 0
+  miner   'verified ZK proof': 0
+  miner   'Failed to verify': 0
+  miner   'Error': 0
+  miner   'rejected': 0
+  miner   'old header': 0
+  miner   'stale': 0
+--- gateway log counts
+  gateway 'Received PlainProof': 10
+  gateway 'verified ZK proof': 0
+  gateway 'submitblock': 0
+  gateway 'Block submitted': 0
+  gateway 'accepted': 20
+  gateway 'rejected': 0
+  gateway 'Failed': 0
+  gateway 'Error': 0
+  gateway 'old header': 5111
+  gateway 'stale': 0
+--- node log
+2026-11-22 17:07:29.353 [INF] RPCS: Accepted block a6efa4ae4a06cfa614d2648fd3a1390be7bcaaaff02d8600578b414ad61f0eb3 via submitblock
+2026-11-22 17:09:01.735 [INF] RPCS: Accepted block 03e1d10c94adf00a58df5911c4e267e1c93ba747e598b7f8faa911df9f08e770 via submitblock
+2026-11-22 17:10:28.550 [INF] RPCS: Accepted block e25cdfdc05b31bebb0a38df7e2db4c2579fe40ba9ca867780af2cfad6404f552 via submitblock
+2026-11-22 17:12:03.254 [INF] RPCS: Accepted block a51d806f371dd9f7b88a8b03150a2c073b6c476e0be1d6aaf93cb56c6dc26134 via submitblock
+2026-11-22 17:13:36.374 [INF] RPCS: Accepted block 18bc8089f19708f2efbfcd5cbd3423a2507fe5df4d79dad3dcb906d1222dc195 via submitblock
+0
+CHAIN_RUN_DONE D_fast_all
+REVERTED tracked changes: 0
+ALL_CHAIN_DONE

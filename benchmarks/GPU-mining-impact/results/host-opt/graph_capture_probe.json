@@ -1,0 +1,46 @@
+[
+ {
+  "step": "vanilla",
+  "capture": "ok",
+  "replay_matches_plain_gemm_on_new_input": true,
+  "replay_ms": 0.0268
+ },
+ {
+  "step": "hash_A",
+  "capture": "ok"
+ },
+ {
+  "step": "hash_B",
+  "capture": "ok"
+ },
+ {
+  "step": "commit",
+  "capture": "ok"
+ },
+ {
+  "step": "noise_gen",
+  "capture": "ok"
+ },
+ {
+  "step": "noisy_gemm",
+  "capture": "ok",
+  "replay_matches_plain_gemm_on_new_input": true,
+  "replay_ms": 0.1518
+ },
+ {
+  "step": "event_record",
+  "capture": "ok"
+ },
+ {
+  "step": "full_nosubmit",
+  "capture": "ok",
+  "replay_matches_plain_gemm_on_new_input": true,
+  "replay_ms": 0.152
+ },
+ {
+  "step": "full_submit",
+  "capture": "ok",
+  "replay_matches_plain_gemm_on_new_input": true,
+  "replay_ms": 0.1521
+ }
+]

@@ -1,0 +1,358 @@
+{
+ "gpu": "NVIDIA H100 NVL",
+ "iters": 50,
+ "rows": [
+  {
+   "shape": "o_proj m=256",
+   "m": 256,
+   "n": 4096,
+   "k": 4096,
+   "vanilla_wall_ms": 0.0274,
+   "noisy_host_ms": 0.6961,
+   "noisy_wall_ms": 0.6977,
+   "accounted_host_ms": 0.6682,
+   "unaccounted_host_ms": 0.0279,
+   "steps": [
+    {
+     "step": "11. GPUMatmulConfigFactory.create",
+     "ms_per_call": 0.3613,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "5. make_pow_target_tensor",
+     "ms_per_call": 0.0884,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "12. torch.empty (all allocations)",
+     "ms_per_call": 0.0581,
+     "calls_per_gemm": 19.0
+    },
+    {
+     "step": "15. Tensor.to (incl. pageable HtoD copy)",
+     "ms_per_call": 0.0476,
+     "calls_per_gemm": 3.0
+    },
+    {
+     "step": "3. generate_noise_factors",
+     "ms_per_call": 0.0327,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "1. tensor_hash (A and B Merkle hash)",
+     "ms_per_call": 0.0315,
+     "calls_per_gemm": 2.0
+    },
+    {
+     "step": "4. noisy_gemm (the mining GEMM launch)",
+     "ms_per_call": 0.0251,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "13. torch.zeros",
+     "ms_per_call": 0.0099,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "2. commitment_hash_from_merkle_roots",
+     "ms_per_call": 0.0046,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "10. CommitmentHasher.get_key (host BLAKE3)",
+     "ms_per_call": 0.0035,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "14. torch.frombuffer (hash key on host)",
+     "ms_per_call": 0.0028,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "6. get_required_scratchpad_bytes",
+     "ms_per_call": 0.0013,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "7. get_host_signal_sync_size",
+     "ms_per_call": 0.0005,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "9. get_pinned_pool",
+     "ms_per_call": 0.0005,
+     "calls_per_gemm": 2.0
+    },
+    {
+     "step": "8. get_async_manager / get_mining_job",
+     "ms_per_call": 0.0004,
+     "calls_per_gemm": 1.0
+    }
+   ]
+  },
+  {
+   "shape": "o_proj m=1024 (threshold)",
+   "m": 1024,
+   "n": 4096,
+   "k": 4096,
+   "vanilla_wall_ms": 0.0303,
+   "noisy_host_ms": 0.6779,
+   "noisy_wall_ms": 0.6798,
+   "accounted_host_ms": 0.6558,
+   "unaccounted_host_ms": 0.0221,
+   "steps": [
+    {
+     "step": "11. GPUMatmulConfigFactory.create",
+     "ms_per_call": 0.3521,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "5. make_pow_target_tensor",
+     "ms_per_call": 0.0892,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "12. torch.empty (all allocations)",
+     "ms_per_call": 0.0574,
+     "calls_per_gemm": 19.0
+    },
+    {
+     "step": "15. Tensor.to (incl. pageable HtoD copy)",
+     "ms_per_call": 0.0465,
+     "calls_per_gemm": 3.0
+    },
+    {
+     "step": "3. generate_noise_factors",
+     "ms_per_call": 0.0325,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "1. tensor_hash (A and B Merkle hash)",
+     "ms_per_call": 0.0305,
+     "calls_per_gemm": 2.0
+    },
+    {
+     "step": "4. noisy_gemm (the mining GEMM launch)",
+     "ms_per_call": 0.0241,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "13. torch.zeros",
+     "ms_per_call": 0.0097,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "2. commitment_hash_from_merkle_roots",
+     "ms_per_call": 0.0047,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "10. CommitmentHasher.get_key (host BLAKE3)",
+     "ms_per_call": 0.0035,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "14. torch.frombuffer (hash key on host)",
+     "ms_per_call": 0.0027,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "6. get_required_scratchpad_bytes",
+     "ms_per_call": 0.0016,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "7. get_host_signal_sync_size",
+     "ms_per_call": 0.0005,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "9. get_pinned_pool",
+     "ms_per_call": 0.0005,
+     "calls_per_gemm": 2.0
+    },
+    {
+     "step": "8. get_async_manager / get_mining_job",
+     "ms_per_call": 0.0003,
+     "calls_per_gemm": 1.0
+    }
+   ]
+  },
+  {
+   "shape": "o_proj m=4096",
+   "m": 4096,
+   "n": 4096,
+   "k": 4096,
+   "vanilla_wall_ms": 0.1253,
+   "noisy_host_ms": 0.7005,
+   "noisy_wall_ms": 0.7046,
+   "accounted_host_ms": 0.6777,
+   "unaccounted_host_ms": 0.0228,
+   "steps": [
+    {
+     "step": "11. GPUMatmulConfigFactory.create",
+     "ms_per_call": 0.352,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "5. make_pow_target_tensor",
+     "ms_per_call": 0.1122,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "12. torch.empty (all allocations)",
+     "ms_per_call": 0.0577,
+     "calls_per_gemm": 19.0
+    },
+    {
+     "step": "15. Tensor.to (incl. pageable HtoD copy)",
+     "ms_per_call": 0.0459,
+     "calls_per_gemm": 3.0
+    },
+    {
+     "step": "3. generate_noise_factors",
+     "ms_per_call": 0.0328,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "1. tensor_hash (A and B Merkle hash)",
+     "ms_per_call": 0.031,
+     "calls_per_gemm": 2.0
+    },
+    {
+     "step": "4. noisy_gemm (the mining GEMM launch)",
+     "ms_per_call": 0.0232,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "13. torch.zeros",
+     "ms_per_call": 0.0097,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "2. commitment_hash_from_merkle_roots",
+     "ms_per_call": 0.0044,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "10. CommitmentHasher.get_key (host BLAKE3)",
+     "ms_per_call": 0.0035,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "14. torch.frombuffer (hash key on host)",
+     "ms_per_call": 0.0028,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "6. get_required_scratchpad_bytes",
+     "ms_per_call": 0.0012,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "7. get_host_signal_sync_size",
+     "ms_per_call": 0.0005,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "9. get_pinned_pool",
+     "ms_per_call": 0.0005,
+     "calls_per_gemm": 2.0
+    },
+    {
+     "step": "8. get_async_manager / get_mining_job",
+     "ms_per_call": 0.0003,
+     "calls_per_gemm": 1.0
+    }
+   ]
+  },
+  {
+   "shape": "gate_up m=1024",
+   "m": 1024,
+   "n": 28672,
+   "k": 4096,
+   "vanilla_wall_ms": 0.2691,
+   "noisy_host_ms": 1.1032,
+   "noisy_wall_ms": 1.1127,
+   "accounted_host_ms": 1.078,
+   "unaccounted_host_ms": 0.0252,
+   "steps": [
+    {
+     "step": "5. make_pow_target_tensor",
+     "ms_per_call": 0.4156,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "11. GPUMatmulConfigFactory.create",
+     "ms_per_call": 0.3608,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "15. Tensor.to (incl. pageable HtoD copy)",
+     "ms_per_call": 0.1274,
+     "calls_per_gemm": 3.0
+    },
+    {
+     "step": "12. torch.empty (all allocations)",
+     "ms_per_call": 0.058,
+     "calls_per_gemm": 19.0
+    },
+    {
+     "step": "1. tensor_hash (A and B Merkle hash)",
+     "ms_per_call": 0.0335,
+     "calls_per_gemm": 2.0
+    },
+    {
+     "step": "3. generate_noise_factors",
+     "ms_per_call": 0.0332,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "4. noisy_gemm (the mining GEMM launch)",
+     "ms_per_call": 0.025,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "13. torch.zeros",
+     "ms_per_call": 0.0099,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "2. commitment_hash_from_merkle_roots",
+     "ms_per_call": 0.0049,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "10. CommitmentHasher.get_key (host BLAKE3)",
+     "ms_per_call": 0.004,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "14. torch.frombuffer (hash key on host)",
+     "ms_per_call": 0.0029,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "6. get_required_scratchpad_bytes",
+     "ms_per_call": 0.0013,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "9. get_pinned_pool",
+     "ms_per_call": 0.0006,
+     "calls_per_gemm": 2.0
+    },
+    {
+     "step": "7. get_host_signal_sync_size",
+     "ms_per_call": 0.0005,
+     "calls_per_gemm": 1.0
+    },
+    {
+     "step": "8. get_async_manager / get_mining_job",
+     "ms_per_call": 0.0004,
+     "calls_per_gemm": 1.0
+    }
+   ]
+  }
+ ]
+}

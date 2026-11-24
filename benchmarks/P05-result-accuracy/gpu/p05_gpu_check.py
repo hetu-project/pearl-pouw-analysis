@@ -144,8 +144,9 @@ def run(args):
     llm = LLM(
         model=args.model,
         max_model_len=4096,
-        enforce_eager=True,  # as in Pearl's test and README
-        gpu_memory_utilization=0.9,
+        # eager as in Pearl's test and README; --graph instead captures decode steps in CUDA graphs
+        **({"compilation_config": {"mode": 0, "cudagraph_mode": "FULL_DECODE_ONLY"}} if args.graph else {"enforce_eager": True}),
+        gpu_memory_utilization=args.gpu_mem,
         attention_config={"backend": "TRITON_ATTN"},  # bitwise-reproducible, as in Pearl's test
         max_num_seqs=1024,
         seed=0,
@@ -166,7 +167,7 @@ def run(args):
         pred = final_number(text)
         rows.append({"text": text, "gold": gold, "pred": pred, "correct": pred is not None and pred == gold})
     result = {
-        "mode": args.mode, "model": args.model, "n": len(rows), "max_tokens": args.max_tokens,
+        "mode": args.mode, "graph": args.graph, "model": args.model, "n": len(rows), "max_tokens": args.max_tokens,
         "gpu": torch.cuda.get_device_name(0), "seconds": round(elapsed, 1),
         "noisy_gemm_calls": stats["calls"], "noisy_gemm_rows": stats["rows"], "noisy_gemm_min_m": stats["min_m"],
         "accuracy": sum(r["correct"] for r in rows) / len(rows), "rows": rows,
@@ -208,6 +209,8 @@ def main():
     r.add_argument("--model", default=DEFAULT_MODEL)
     r.add_argument("--n", type=int, default=0, help="number of GSM8K test questions (0 = all 1319)")
     r.add_argument("--max-tokens", type=int, default=512)
+    r.add_argument("--gpu-mem", type=float, default=0.9)
+    r.add_argument("--graph", action="store_true", help="CUDA graphs for decode instead of --enforce-eager (not supported by Pearl)")
     c = sub.add_parser("compare")
     c.add_argument("off")
     c.add_argument("on")

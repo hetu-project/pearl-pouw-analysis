@@ -1,0 +1,20 @@
+{
+  "note": "Pearl ZK proof cost, measured with Pearl's own zk-pow/src/bin/prove_verify.rs (bench + cache). Source reverted after measurement.",
+  "pearl_commit": "156ef9a8eb9dc7c74fab8c502598b8b53d4be7b1",
+  "cpu": "AMD EPYC 9V84 96-Core Processor, 40 cores visible",
+  "mainnet_target_block_time_s": 194,
+  "rows": [
+    {"common_dim_k": 3584,  "witness_kb": 231,  "prove_s": 2.63,  "verify_ms": 7.45,  "proof_bytes": 59560, "public_data_bytes": 164},
+    {"common_dim_k": 7168,  "witness_kb": 462,  "prove_s": 3.43,  "verify_ms": 10.42, "proof_bytes": 59560, "public_data_bytes": 164},
+    {"common_dim_k": 14336, "witness_kb": 924,  "prove_s": 5.48,  "verify_ms": 16.13, "proof_bytes": 59560, "public_data_bytes": 164},
+    {"common_dim_k": 28672, "witness_kb": 1848, "prove_s": 9.43,  "verify_ms": 26.59, "proof_bytes": 59560, "public_data_bytes": 164},
+    {"common_dim_k": 57344, "witness_kb": 3696, "prove_s": 18.99, "verify_ms": 55.90, "proof_bytes": 59560, "public_data_bytes": 164}
+  ],
+  "circuit_cache": {
+    "embedded_cache_load_s": 0.000005,
+    "embedded_cache_circuits": 0,
+    "fill_from_scratch_s": 9.62,
+    "circuits_built": {"first": 13, "second": 2}
+  },
+  "certificate_max_size_bytes": 66560
+}
